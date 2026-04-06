@@ -1,3 +1,25 @@
+/* RESET - ADD THIS TO TOP */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+/* FIX FOR BROKEN HERO SHIFT */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: 80px; /* Space for the fixed nav */
+}
+
+/* Ensure the Font Awesome icons don't affect card sizes */
+.platform-icon i {
+  font-size: 2.5rem;
+  line-height: 1;
+  display: block;
+  margin: 0 auto 1rem;
+}
 :root {
   --red: #e63946;
   --gold: #f4c430;
