@@ -1,24 +1,14 @@
 // JavaScript code for scroll reveal animations using Intersection Observer
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     const revealElements = document.querySelectorAll('.reveal');
-
-    const options = {
-        root: null, // Use the viewport as the container
-        rootMargin: '0px',
-        threshold: 0.1 // Trigger when 10% of the element is visible
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+                setTimeout(() => { entry.target.classList.add('visible'); }, index * 150);
                 observer.unobserve(entry.target);
             }
         });
-    }, options);
-
-    revealElements.forEach(element => {
-        observer.observe(element);
-    });
+    }, { threshold: 0.15 });
+    revealElements.forEach(el => observer.observe(el));
 });
