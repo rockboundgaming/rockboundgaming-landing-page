@@ -1,24 +1,39 @@
-// JavaScript code for scroll reveal animations using Intersection Observer
-
+// Scroll Reveal Animation & Mobile Navigation
 document.addEventListener('DOMContentLoaded', function() {
-    const revealElements = document.querySelectorAll('.reveal');
-
-    const options = {
-        root: null, // Use the viewport as the container
-        rootMargin: '0px',
-        threshold: 0.1 // Trigger when 10% of the element is visible
-    };
-
+  // Reveal animation
+  const revealElements = document.querySelectorAll('.reveal');
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    revealElements.forEach(el => el.classList.add('visible'));
+  } else {
     const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, options);
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealElements.forEach(el => observer.observe(el));
+  }
 
-    revealElements.forEach(element => {
-        observer.observe(element);
+  // Mobile nav menu
+  const navToggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', function() {
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', (!expanded).toString());
     });
+
+    // Close nav on link click (for one-page nav)
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (navLinks.classList.contains('open')) {
+          navLinks.classList.remove('open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
 });
