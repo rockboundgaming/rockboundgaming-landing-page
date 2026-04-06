@@ -63,7 +63,15 @@ nav {
 
 .hero-branding { display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem; }
 .logo-big { max-width: 500px; width: 90%; height: auto; filter: drop-shadow(0 0 20px rgba(230, 57, 70, 0.3)); }
-.tagline-img { max-width: 500px; width: 90%; height: auto; margin-top: -15px; }
+
+/* ENLARGED TAGLINE FIX */
+.tagline-img { 
+  max-width: 550px; 
+  width: 95%; 
+  height: auto; 
+  margin-top: -12px; 
+  filter: drop-shadow(0 0 15px rgba(230, 57, 70, 0.2)); 
+}
 
 /* 4. BUTTONS */
 .hero-btns { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
@@ -93,16 +101,13 @@ section { padding: 8rem 2rem; max-width: 1200px; margin: 0 auto; }
 .section-title { font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 6vw, 5rem); letter-spacing: 3px; line-height: 1; margin-bottom: 1.5rem; }
 .section-title span { color: var(--red); }
 
-/* About & Streamer Grids */
 .about-grid, .streamer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
 .about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .about-card { background: var(--card); border: 1px solid rgba(230, 57, 70, 0.2); padding: 1.5rem; border-left: 3px solid var(--red); transition: 0.3s; }
 .about-card:hover { transform: translateY(-4px); border-color: var(--red); }
 
-/* Icons inside cards */
 .about-card-icon i, .perk-icon i, .feature-emoji i { font-size: 2rem; color: var(--white); margin-bottom: 0.5rem; display: block; }
 
-/* Streamer Perks & Phases */
 .perks-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
 .perks-list li { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border-left: 3px solid var(--red); }
 .phases { display: flex; flex-direction: column; gap: 1.5rem; }
@@ -118,7 +123,6 @@ section { padding: 8rem 2rem; max-width: 1200px; margin: 0 auto; }
 }
 .platform-card:hover, .feature-card:hover { border-color: var(--red); transform: translateY(-8px); }
 
-/* The Official Logo Icons */
 .platform-icon i {
   font-family: "Font Awesome 6 Brands", "Font Awesome 6 Free" !important;
   font-size: 3.5rem; display: block; margin-bottom: 1.5rem; color: var(--white); transition: 0.3s;
