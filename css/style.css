@@ -145,16 +145,14 @@ nav {
   clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
 }
 
-.hero h1 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(4rem, 12vw, 10rem);
-  line-height: 0.9;
-  letter-spacing: 4px;
-  margin-bottom: 1rem;
+.hero-logo {
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 1s ease forwards;
+  filter: drop-shadow(0 20px 40px rgba(230, 57, 70, 0.2));
 }
-
-.hero h1 .line1 { color: var(--white); }
-.hero h1 .line2 { color: var(--red); }
 
 .hero-sub {
   font-size: 1.2rem;
@@ -766,4 +764,5 @@ footer {
   .streamer-section { padding: 4rem 1.5rem; }
   section { padding: 4rem 1.5rem; }
   .stats-bar { gap: 2rem; }
+  .hero-logo { max-width: 300px; }
 }
