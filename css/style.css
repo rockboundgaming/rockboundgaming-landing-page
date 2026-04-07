@@ -95,9 +95,10 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 2rem 2rem;
+  padding: 6rem 2rem 0;
   position: relative;
   text-align: center;
+  padding-bottom: 8rem;
 }
 
 .hero-bg {
@@ -125,6 +126,7 @@ nav {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
 }
 
 /* LOGO */
@@ -166,7 +168,7 @@ nav {
   animation: fadeUp 1s ease forwards 0.2s both;
 }
 
-/* STATS - FULL WIDTH */
+/* STATS - FULL WIDTH AT BOTTOM */
 .hero-stats {
   background: var(--red);
   width: 100vw;
@@ -178,6 +180,10 @@ nav {
   align-items: center;
   gap: 3rem;
   flex-wrap: wrap;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   animation: fadeUp 1s ease forwards 0.3s both;
 }
 
@@ -863,6 +869,10 @@ footer {
 
   .hero-logo { 
     max-width: 350px; 
+  }
+
+  .hero {
+    padding-bottom: 10rem;
   }
 
   section { 
