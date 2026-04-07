@@ -727,6 +727,20 @@ section {
 }
 
 /* ============================================
+   STREAMER BUTTON SECTION MATCH
+   ============================================ */
+.streamer-grid .btn-primary {
+  background: white;
+  color: var(--red);
+  border: none;
+}
+
+.streamer-grid .btn-primary:hover {
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* ============================================
    FOOTER
    ============================================ */
 footer {
