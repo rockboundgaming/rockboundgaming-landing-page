@@ -160,6 +160,44 @@ function displayFeaturedCreators(creators) {
   container.innerHTML = '';
   
   creators.forEach(creator => {
+    // Determine if we're on localhost or live domain
+    const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    let embedHTML = '';
+    
+    if (isDevelopment) {
+      // Show placeholder during development
+      embedHTML = `
+        <div class="creator-embed-placeholder">
+          <div class="placeholder-content">
+            <i class="fas fa-play-circle"></i>
+            <h4>Twitch Embed Preview</h4>
+            <p>${creator.name} is ${creator.status}</p>
+            <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">
+              Live embeds work on production domain
+            </p>
+            <a href="https://twitch.tv/${creator.twitch}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="margin-top: 1rem; display: inline-block;">
+              Watch on Twitch
+            </a>
+          </div>
+        </div>
+      `;
+    } else {
+      // Live embed for production
+      embedHTML = `
+        <div class="creator-embed-wrapper">
+          <iframe
+            src="https://twitch.tv/embed/${creator.twitch}?parent=${window.location.hostname}"
+            height="500"
+            width="100%"
+            frameborder="0"
+            scrolling="no"
+            allowfullscreen="true">
+          </iframe>
+        </div>
+      `;
+    }
+    
     const creatorHTML = `
       <div class="creator-featured">
         <div class="creator-featured-header">
@@ -174,16 +212,7 @@ function displayFeaturedCreators(creators) {
             ${creator.status}
           </div>
         </div>
-        <div class="creator-embed-wrapper">
-          <iframe
-            src="https://twitch.tv/embed/${creator.twitch}?parent=localhost&parent=rockgamingnl.ca&parent=www.rockgamingnl.ca"
-            height="500"
-            width="100%"
-            frameborder="0"
-            scrolling="no"
-            allowfullscreen="true">
-          </iframe>
-        </div>
+        ${embedHTML}
       </div>
     `;
     
