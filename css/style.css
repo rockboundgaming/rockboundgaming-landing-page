@@ -958,6 +958,11 @@ section:nth-child(odd) {
   border-radius: 12px;
   overflow: hidden;
   margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .live-cta::before {
