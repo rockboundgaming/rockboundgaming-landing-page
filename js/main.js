@@ -105,7 +105,6 @@ async function loadFeaturedCreators() {
     }
     
     const data = await response.text();
-
     const rows = data.split("\n");
 
     const creators = rows
@@ -129,12 +128,14 @@ async function loadFeaturedCreators() {
 
     const seen = new Set();
 
+    // FIXED: Only show creators who are BOTH featured AND currently streaming
     const featuredCreators = creators.filter(c => {
       const key = c.twitch.toLowerCase();
 
       if (seen.has(key)) return false;
       seen.add(key);
 
+      // Must be: Level 5+, Featured=Yes, Status=Active (currently streaming)
       return c.level >= 5 && c.featured === "Yes" && c.status === "Active";
     });
 
@@ -158,6 +159,7 @@ function displayFeaturedCreators(creators) {
     return;
   }
 
+  // If no creators are live, show "No one is live right now"
   if (creators.length === 0) {
     displayNoCreators();
     return;
@@ -223,11 +225,12 @@ function displayNoCreators() {
 
   if (!container) return;
 
+  // Changed message to "No one is live right now"
   container.innerHTML = `
     <div class="no-featured-creators">
       <i class="fas fa-video"></i>
-      <p>No featured creators streaming right now</p>
-      <p style="font-size: 0.9rem; margin-top: 0.5rem;">Reach Level 5 in Discord to get featured!</p>
+      <p>No one is live right now</p>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon for featured creators!</p>
     </div>
   `;
 }
