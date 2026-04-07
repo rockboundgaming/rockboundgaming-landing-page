@@ -97,7 +97,10 @@ async function loadFeaturedCreators() {
   const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg/pub?output=csv";
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'no-cors'
+    });
     const data = await response.text();
 
     const rows = data.split("\n").slice(1);
