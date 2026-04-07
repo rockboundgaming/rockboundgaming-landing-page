@@ -101,7 +101,7 @@ async function fetchFeaturedCreators() {
     
     // Parse CSV
     const lines = csv.trim().split('\n');
-    const featuredCreators = [];
+    let creators = [];
     
     // Skip header row (row 0)
     for (let i = 1; i < lines.length; i++) {
@@ -109,17 +109,16 @@ async function fetchFeaturedCreators() {
       
       if (cols.length < 5) continue; // Skip incomplete rows
       
-      const twitchName = cols[0];
-      const displayName = cols[1];
-      const level = parseInt(cols[2]);
-      const status = cols[3];
-      const featured = cols[4];
+      const twitchName = cols[0]?.trim();
+      const displayName = cols[1]?.trim();
+      const level = parseInt(cols[2]) || 0;
+      const status = cols[3]?.trim();
+      const featured = cols[4]?.trim();
       
-      // Check if Level >= 5 and Featured = Yes
-      if (level >= 5 && featured.toLowerCase() === "yes" && twitchName) {
-        featuredCreators.push({
-          twitchName: twitchName,
-          displayName: displayName,
+      if (twitchName) {
+        creators.push({
+          twitch: twitchName,
+          name: displayName,
           level: level,
           status: status,
           featured: featured
@@ -127,16 +126,39 @@ async function fetchFeaturedCreators() {
       }
     }
     
+    // Remove duplicates using Set
+    const seen = new Set();
+    
+    const featuredCreators = creators.filter(c => {
+      const key = c.twitch.toLowerCase();
+      
+      // Skip if already seen (removes duplicates)
+      if (seen.has(key)) return false;
+      seen.add(key);
+      
+      // Only show if Level >= 5 AND Featured = "Yes" AND Status = "Active"
+      return (
+        c.level >= 5 &&
+        c.featured?.trim().toLowerCase() === "yes" &&
+        c.status?.trim().toLowerCase() === "active"
+      );
+    });
+    
     displayFeaturedCreators(featuredCreators);
     
   } catch (error) {
-    console.error('Error fetching creators:', error);
+    console.error('Error loading creators:', error);
     displayNoCreators();
   }
 }
 
 function displayFeaturedCreators(creators) {
   const container = document.getElementById('creator-list');
+  
+  if (!container) {
+    console.error('creator-list container not found');
+    return;
+  }
   
   if (creators.length === 0) {
     displayNoCreators();
@@ -153,7 +175,7 @@ function displayFeaturedCreators(creators) {
             <i class="fas fa-user"></i>
           </div>
           <div class="creator-info">
-            <h3 class="creator-name">${creator.displayName}</h3>
+            <h3 class="creator-name">${creator.name}</h3>
             <p class="creator-level">Level ${creator.level}</p>
           </div>
           <div class="creator-status-badge">
@@ -162,7 +184,7 @@ function displayFeaturedCreators(creators) {
         </div>
         <div class="creator-embed-wrapper">
           <iframe
-            src="https://twitch.tv/embed/${creator.twitchName}/chat?parent=localhost&parent=rockgamingnl.ca&parent=www.rockgamingnl.ca"
+            src="https://twitch.tv/embed/${creator.twitch}/chat?parent=localhost&parent=rockgamingnl.ca&parent=www.rockgamingnl.ca"
             height="500"
             width="100%"
             frameborder="0"
@@ -175,10 +197,15 @@ function displayFeaturedCreators(creators) {
     
     container.innerHTML += creatorHTML;
   });
+  
+  console.log(`✅ Loaded ${creators.length} featured creator(s)`);
 }
 
 function displayNoCreators() {
   const container = document.getElementById('creator-list');
+  
+  if (!container) return;
+  
   container.innerHTML = `
     <div class="no-featured-creators">
       <i class="fas fa-video"></i>
@@ -186,10 +213,17 @@ function displayNoCreators() {
       <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon or join our Discord!</p>
     </div>
   `;
+  
+  console.log('ℹ️ No featured creators at this time');
 }
 
 // Fetch creators when page loads
-document.addEventListener('DOMContentLoaded', fetchFeaturedCreators);
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('🔄 Fetching featured creators...');
+  fetchFeaturedCreators();
+});
 
 // Refresh every 5 minutes
 setInterval(fetchFeaturedCreators, 300000);
+
+console.log('✅ Creator script loaded');
