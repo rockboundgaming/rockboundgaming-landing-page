@@ -88,6 +88,11 @@ body::before {
   }
 }
 
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -20px); }
+}
+
 /* ============================================
    NAV
    ============================================ */
@@ -946,22 +951,76 @@ section:nth-child(odd) {
    LIVE CTA
    ============================================ */
 .live-cta {
-  text-align: center;
-  padding: 2rem;
-  background: rgba(230,57,70,0.05);
-  border: 1px solid rgba(230,57,70,0.2);
-  border-radius: 8px;
+  position: relative;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, rgba(230,57,70,0.15) 0%, rgba(244,196,48,0.05) 100%);
+  border: 2px solid var(--red);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 3rem;
+}
+
+.live-cta::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(230,57,70,0.2), transparent);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+.live-cta::after {
+  content: '';
+  position: absolute;
+  bottom: -50%;
+  left: -50%;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(244,196,48,0.1), transparent);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite reverse;
 }
 
 .live-cta p {
-  font-size: 1.1rem;
-  color: rgba(241,250,238,0.7);
+  font-size: 1.3rem;
+  color: var(--white);
   margin-bottom: 1.5rem;
   line-height: 1.6;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 2;
+}
+
+.live-cta p:first-letter {
+  color: var(--red);
+  font-size: 1.5rem;
 }
 
 .live-cta .btn-secondary {
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+  padding: 1.2rem 3rem;
+  font-size: 1.1rem;
+  border: 2px solid var(--red);
+  color: var(--red);
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: rgba(230,57,70,0.1);
+  transition: all 0.3s ease;
+}
+
+.live-cta .btn-secondary:hover {
+  background: var(--red);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(230,57,70,0.5);
 }
 
 /* ============================================
@@ -1410,11 +1469,18 @@ footer {
   }
 
   .live-cta {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
+    margin-top: 2rem;
   }
 
   .live-cta p {
-    font-size: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .live-cta .btn-secondary {
+    padding: 1rem 2rem;
+    font-size: 0.9rem;
   }
 
   .no-featured-creators {
