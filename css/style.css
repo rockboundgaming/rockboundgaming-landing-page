@@ -1,6 +1,5 @@
 /* ============================================
-   ROCKBOUND GAMING — UPGRADED STYLE
-   Built on the Rock. Gaming Everywhere.
+   ROCKBOUND GAMING — FINAL FIXED STYLE
    ============================================ */
 
 /* VARIABLES */
@@ -8,9 +7,7 @@
   --red: #e63946;
   --gold: #f4c430;
   --blue: #1d3557;
-  --light-blue: #457b9d;
   --white: #f1faee;
-  --dark: #0a0e1a;
   --darker: #060810;
   --card: #111827;
 }
@@ -27,14 +24,13 @@ body {
   overflow-x: hidden;
 }
 
-/* SUBTLE NOISE */
+/* NOISE */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 0;
   opacity: 0.08;
 }
 
@@ -50,13 +46,12 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(6, 8, 16, 0.85);
+  background: rgba(6,8,16,0.85);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(230, 57, 70, 0.2);
 }
 
 .nav-logo {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Bebas Neue';
   font-size: 1.8rem;
   letter-spacing: 3px;
 }
@@ -70,17 +65,16 @@ nav {
 }
 
 .nav-links a {
-  color: var(--white);
+  color: white;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
 
 .nav-links a:hover { color: var(--red); }
 
-/* MOBILE MENU */
+/* MOBILE */
 .menu-toggle {
   display: none;
   font-size: 1.5rem;
@@ -95,8 +89,8 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   padding: 6rem 2rem 2rem;
+  position: relative;
   text-align: center;
 }
 
@@ -107,12 +101,6 @@ nav {
     radial-gradient(circle at 20% 50%, rgba(230,57,70,0.15), transparent 60%),
     radial-gradient(circle at 80% 20%, rgba(69,123,157,0.2), transparent 50%),
     var(--darker);
-  animation: pulseBg 10s ease-in-out infinite;
-}
-
-@keyframes pulseBg {
-  0%,100% { opacity: 1; }
-  50% { opacity: 0.85; }
 }
 
 .hero-grid {
@@ -122,16 +110,11 @@ nav {
     linear-gradient(rgba(230,57,70,0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(230,57,70,0.05) 1px, transparent 1px);
   background-size: 60px 60px;
-  animation: gridMove 20s linear infinite;
-}
-
-@keyframes gridMove {
-  100% { transform: translateY(60px); }
 }
 
 .hero-content {
   position: relative;
-  z-index: 10;
+  z-index: 2;
   max-width: 1000px;
 }
 
@@ -140,16 +123,14 @@ nav {
   max-width: 600px;
   width: 100%;
   margin-bottom: 1rem;
-  filter: drop-shadow(0 0 25px rgba(230,57,70,0.6));
 }
 
-/* TAGLINE (TEXT VERSION) */
+/* TAGLINE */
 .hero-tagline-text {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2.5rem, 6vw, 6rem);
+  font-family: 'Bebas Neue';
+  font-size: clamp(2.5rem,6vw,6rem);
   letter-spacing: 4px;
   text-transform: uppercase;
-  line-height: 1.1;
   margin-bottom: 2rem;
 }
 
@@ -173,7 +154,7 @@ nav {
 }
 
 .stat-number {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Bebas Neue';
   font-size: 2rem;
 }
 
@@ -186,34 +167,18 @@ nav {
    BUTTONS
    ============================================ */
 .btn-primary {
+  display: inline-block;
   background: var(--red);
-  padding: 1.2rem 3rem;
   color: white;
+  padding: 1.2rem 2.5rem;
   font-weight: 700;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   text-decoration: none;
-  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
-  transition: 0.2s;
+  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(230,57,70,0.5);
-}
-
-.btn-primary:active {
-  transform: scale(0.95);
-}
-
-.btn-white {
-  background: white;
-  color: var(--red);
-  padding: 1rem 2rem;
-}
-
-.btn-dark {
-  background: rgba(0,0,0,0.4);
-  padding: 1rem 2rem;
 }
 
 /* ============================================
@@ -222,7 +187,7 @@ nav {
 section {
   padding: 6rem 2rem;
   max-width: 1200px;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .section-title {
@@ -232,17 +197,69 @@ section {
 
 .section-title span { color: var(--red); }
 
-/* CARDS */
-.about-card,
+/* ============================================
+   GRID LAYOUTS (CRITICAL FIX)
+   ============================================ */
+.about-grid,
+.streamer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+}
+
+.about-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+.about-card {
+  background: var(--card);
+  border: 1px solid rgba(230,57,70,0.2);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.about-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--red);
+}
+
+.about-card:hover {
+  transform: translateY(-4px);
+}
+
 .feature-card {
   background: var(--card);
   padding: 1.5rem;
-  transition: 0.3s;
 }
 
-.about-card:hover,
-.feature-card:hover {
-  transform: translateY(-6px) scale(1.02);
+/* ============================================
+   STREAMER SECTION FIX
+   ============================================ */
+.perks-list {
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.perks-list li {
+  margin-bottom: 0.5rem;
+}
+
+.phases {
+  margin-top: 1rem;
+}
+
+.phase {
+  margin-bottom: 0.5rem;
 }
 
 /* ============================================
@@ -252,22 +269,11 @@ section {
   background: var(--red);
   text-align: center;
   padding: 5rem 2rem;
-  position: relative;
-}
-
-.cta-section::before {
-  content: 'JOIN';
-  position: absolute;
-  font-size: clamp(6rem, 20vw, 14rem);
-  color: rgba(0,0,0,0.1);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .cta-section h2 {
   font-family: 'Bebas Neue';
-  font-size: clamp(3rem, 8vw, 7rem);
+  font-size: clamp(3rem,8vw,7rem);
 }
 
 /* ============================================
@@ -304,9 +310,7 @@ footer {
    ============================================ */
 @media (max-width: 768px) {
 
-  .menu-toggle {
-    display: block;
-  }
+  .menu-toggle { display: block; }
 
   .nav-links {
     position: absolute;
@@ -318,23 +322,19 @@ footer {
     display: none;
   }
 
-  .nav-links.active {
-    display: flex;
+  .nav-links.active { display: flex; }
+
+  .about-grid,
+  .streamer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
-  .hero-logo {
-    max-width: 350px;
+  .about-cards {
+    grid-template-columns: 1fr;
   }
 
-  .hero-tagline-text {
-    font-size: 2.2rem;
-  }
+  .hero-logo { max-width: 350px; }
 
-  .hero-stats {
-    gap: 1.5rem;
-  }
-
-  section {
-    padding: 4rem 1.5rem;
-  }
+  section { padding: 4rem 1.5rem; }
 }
