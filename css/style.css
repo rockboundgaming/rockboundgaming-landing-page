@@ -1100,8 +1100,8 @@ footer {
 
   /* HERO MOBILE */
 .hero {
-  padding: 3rem 1rem 0;
-  min-height: 120vh;
+  padding: 3rem 1rem 6rem;
+  padding-bottom: 22rem;
   position: relative;
 }
 
@@ -1142,7 +1142,6 @@ footer {
   padding: 1rem 0.5rem;
   bottom: 0;
 }
-
   .stat-item {
     flex: 0 0 calc(33.333% - 0.5rem);
     min-width: auto;
