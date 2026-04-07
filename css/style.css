@@ -672,9 +672,9 @@ section {
 }
 
 .roadmap-content p {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: rgba(241,250,238,0.6);
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 /* ============================================
@@ -1104,7 +1104,7 @@ footer {
   }
 
   .roadmap-content p {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .roadmap-title {
