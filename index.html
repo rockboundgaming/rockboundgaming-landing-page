@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<link rel="icon" href="./assets/logos/favcon.jpg" type="image/jpeg">
 
 <title>Rockbound Gaming — Built on the Rock. Gaming Everywhere.</title>
 <meta name="description" content="Rockbound Gaming is Newfoundland's fastest growing gaming community connecting players, streamers, and creators across all platforms.">
 
-<link rel="icon" href="./assets/logos/favicon.png">
-
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" as="style">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
 
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <link rel="stylesheet" href="css/style.css">
@@ -42,7 +43,7 @@
   <div class="hero-grid"></div>
 
   <div class="hero-content">
-    <img src="./assets/logos/tplogo.png" alt="Rockbound Gaming Logo" class="hero-logo">
+    <img src="./assets/logos/tplogo.png" alt="Rockbound Gaming Logo" class="hero-logo" loading="lazy">
 
     <h1 class="hero-tagline-text">
       Built on the Rock.<br>Gaming Everywhere.
@@ -77,7 +78,7 @@
     </div>
     <div class="stat-item">
       <div class="stat-number">NL</div>
-      <div class="stat-label">Born & Built </div>
+      <div class="stat-label">Born & Built 🌊</div>
     </div>
   </div>
 </div>
@@ -380,7 +381,7 @@
   <div class="footer-copy">© 2026 Rockbound Gaming</div>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="js/main.js" defer></script>
 
 </body>
 </html>
