@@ -146,7 +146,7 @@ async function loadFeaturedCreators() {
 }
 
 // ============================================
-//   DISPLAY CREATORS WITH TWITCH EMBED
+//   DISPLAY CREATORS WITH TWITCH STREAM ONLY
 // ============================================
 
 function displayFeaturedCreators(creators) {
@@ -162,7 +162,7 @@ function displayFeaturedCreators(creators) {
     return;
   }
 
-  // Build HTML for all featured creators
+  // Build HTML for all featured creators - STREAM ONLY (NO CHAT)
   container.innerHTML = creators.map(c => {
     return `
       <div class="creator-featured">
@@ -180,8 +180,9 @@ function displayFeaturedCreators(creators) {
         </div>
         <div class="twitch-embed-container">
           <iframe
-            src="https://twitch.tv/embed/${c.twitch}/chat?parent=${window.location.hostname}&darkpixel=on"
-            allowfullscreen=""
+            src="https://player.twitch.tv/?channel=${c.twitch}&parent=${window.location.hostname}&muted=false"
+            allowfullscreen="allowfullscreen"
+            scrolling="no"
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;">
           </iframe>
         </div>
@@ -225,14 +226,17 @@ function loadTwitchScript() {
 // RUN on page load
 document.addEventListener('DOMContentLoaded', loadFeaturedCreators);
 
-// Only refresh when user comes back to tab
+// Refresh every 60 seconds to detect when stream goes offline
+setInterval(loadFeaturedCreators, 60000);
+
+// Also refresh when user comes back to tab
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
     loadFeaturedCreators();
   }
 });
 
-// Only refresh when window regains focus
+// Refresh when window regains focus
 window.addEventListener('focus', () => {
   loadFeaturedCreators();
 });
