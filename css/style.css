@@ -492,7 +492,7 @@ section {
 
 .about-card h4 {
   font-family: 'Barlow Condensed';
-  font-size: 1rem;
+  font-size: 1.2rem;
   letter-spacing: 2px;
   text-transform: uppercase;
   margin-bottom: 0.3rem;
@@ -500,7 +500,7 @@ section {
 }
 
 .about-card p {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: rgba(241,250,238,0.6);
   line-height: 1.5;
 }
@@ -560,7 +560,7 @@ section {
 
 .perks-list li strong {
   font-family: 'Barlow Condensed';
-  font-size: 1rem;
+  font-size: 1.1rem;
   letter-spacing: 1px;
   text-transform: uppercase;
   display: block;
@@ -568,7 +568,7 @@ section {
 }
 
 .perks-list li p {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: rgba(241,250,238,0.6);
 }
 
@@ -645,14 +645,14 @@ section {
 
 .feature-card h4 {
   font-family: 'Barlow Condensed';
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   letter-spacing: 2px;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
 }
 
 .feature-card p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: rgba(241,250,238,0.6);
   line-height: 1.6;
 }
@@ -971,12 +971,28 @@ footer {
     font-size: 0.95rem;
   }
 
-  .card-icon {
-    font-size: 2.5rem;
+  .about-card h4 {
+    font-size: 1rem;
   }
 
-  .feature-icon {
-    font-size: 2rem;
+  .about-card p {
+    font-size: 0.9rem;
+  }
+
+  .feature-card h4 {
+    font-size: 1rem;
+  }
+
+  .feature-card p {
+    font-size: 0.9rem;
+  }
+
+  .perks-list li strong {
+    font-size: 1rem;
+  }
+
+  .perks-list li p {
+    font-size: 0.9rem;
   }
 
   .hero-logo { 
