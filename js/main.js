@@ -96,56 +96,61 @@ const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR_A_KNK2zWNA
 
 async function fetchFeaturedCreators() {
   try {
-    console.log('🔄 Fetching from:', sheetURL);
     const response = await fetch(sheetURL);
     const csv = await response.text();
     
     const lines = csv.trim().split('\n');
-    console.log('Total lines in CSV:', lines.length);
-    console.log('Raw CSV data:', csv);
-    
     let allCreators = [];
     
+    // Skip header row and parse data
     for (let i = 1; i < lines.length; i++) {
       const cols = lines[i].split(',').map(col => col.trim());
-      console.log(`Row ${i} columns:`, cols);
       
-      if (cols.length >= 5) {
+      // Only process rows with enough columns
+      if (cols.length >= 6) {
         allCreators.push({
-          twitch: cols[0],
-          name: cols[1],
-          level: parseInt(cols[2]),
-          status: cols[3],
-          featured: cols[4]
+          twitch: cols[0],           // Col 0: TwitchName
+          name: cols[1],             // Col 1: DisplayName
+          level: parseInt(cols[2]),  // Col 2: Level
+          hours: cols[3],            // Col 3: TotalHours
+          featured: cols[4],         // Col 4: Featured (Yes/No)
+          status: cols[5]            // Col 5: Status (Active/Inactive)
         });
       }
     }
     
-    console.log('All creators found:', allCreators);
-    
+    // Remove duplicates and filter by requirements
     const seen = new Set();
     const featuredCreators = allCreators.filter(c => {
       const key = c.twitch.toLowerCase();
+      
+      // Skip if duplicate
       if (seen.has(key)) return false;
       seen.add(key);
       
-      const passes = c.level >= 5 && c.featured.toLowerCase() === "yes" && c.status.toLowerCase() === "active";
-      console.log(`Creator: ${c.twitch} | Level: ${c.level} | Status: ${c.status} | Featured: ${c.featured} | PASSES: ${passes}`);
-      return passes;
+      // Only show if: Level >= 5 AND Featured = "yes" AND Status = "active"
+      return (
+        c.level >= 5 &&
+        c.featured.toLowerCase() === "yes" &&
+        c.status.toLowerCase() === "active"
+      );
     });
     
-    console.log('Final featured creators:', featuredCreators);
     displayFeaturedCreators(featuredCreators);
     
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error loading creators:', error);
     displayNoCreators();
   }
 }
 
 function displayFeaturedCreators(creators) {
   const container = document.getElementById('creator-list');
-  if (!container) return;
+  
+  if (!container) {
+    console.error('creator-list container not found');
+    return;
+  }
   
   if (creators.length === 0) {
     displayNoCreators();
@@ -184,12 +189,11 @@ function displayFeaturedCreators(creators) {
     
     container.innerHTML += creatorHTML;
   });
-  
-  console.log(`✅ Loaded ${creators.length} featured creator(s)`);
 }
 
 function displayNoCreators() {
   const container = document.getElementById('creator-list');
+  
   if (!container) return;
   
   container.innerHTML = `
@@ -199,10 +203,10 @@ function displayNoCreators() {
       <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon or join our Discord!</p>
     </div>
   `;
-  
-  console.log('ℹ️ No featured creators at this time');
 }
 
+// Fetch creators when page loads
 document.addEventListener('DOMContentLoaded', fetchFeaturedCreators);
+
+// Refresh every 5 minutes
 setInterval(fetchFeaturedCreators, 300000);
-console.log('✅ Creator script loaded');
