@@ -377,6 +377,21 @@ section {
 }
 
 /* ============================================
+   ABOUT TEXT
+   ============================================ */
+.about-text p {
+  font-size: 1.1rem;
+  color: rgba(241,250,238,0.8);
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+}
+
+.about-text p strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+/* ============================================
    DIVIDER
    ============================================ */
 .divider {
@@ -907,6 +922,10 @@ footer {
 
   .about-cards {
     grid-template-columns: 1fr;
+  }
+
+  .about-text p {
+    font-size: 1rem;
   }
 
   .hero-logo { 
