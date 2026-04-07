@@ -180,12 +180,12 @@ nav {
   align-items: center;
   gap: 4rem;
   flex-wrap: wrap;
-  width: 100%;
+  width: 100vw;
   position: relative;
   left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  transform: translateX(-50%);
+  margin-left: 0;
+  margin-right: 0;
   margin-top: 2rem;
   margin-bottom: 0;
 }
