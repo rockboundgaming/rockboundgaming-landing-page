@@ -166,6 +166,17 @@ nav {
   animation: fadeUp 1s ease forwards 0.2s both;
 }
 
+.hero-btns .btn-primary:nth-child(2) {
+  background: white;
+  color: var(--red);
+  border: none;
+}
+
+.hero-btns .btn-primary:nth-child(2):hover {
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
 /* STATS - FULL WIDTH */
 .hero-stats {
   background: var(--red);
@@ -724,20 +735,6 @@ section {
 .cta-btns .btn-dark:hover {
   background: rgba(0,0,0,0.5);
   transform: translateY(-2px);
-}
-
-/* ============================================
-   STREAMER BUTTON SECTION MATCH
-   ============================================ */
-.streamer-grid .btn-primary {
-  background: white;
-  color: var(--red);
-  border: none;
-}
-
-.streamer-grid .btn-primary:hover {
-  background: rgba(255,255,255,0.9);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
 /* ============================================
