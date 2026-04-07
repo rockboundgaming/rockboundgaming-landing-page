@@ -79,6 +79,15 @@ body::before {
   100% { transform: translateY(20px); }
 }
 
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(230,57,70,0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(230,57,70,0.8);
+  }
+}
+
 /* ============================================
    NAV
    ============================================ */
@@ -762,35 +771,132 @@ section:nth-child(odd) {
 }
 
 /* ============================================
-   LIVE HUB SECTION
+   CREATOR LIST CONTAINER
    ============================================ */
-#live {
-  background: linear-gradient(135deg, rgba(230,57,70,0.03) 0%, rgba(29,53,87,0.05) 100%);
-}
-
-.live-wrapper {
+.creator-list-container {
   width: 100%;
   margin-bottom: 2rem;
-  transition: all 0.3s ease;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
 }
 
-.live-wrapper:hover {
-  box-shadow: 0 0 30px rgba(230,57,70,0.3);
-}
-
-.live-wrapper div {
+.creator-featured {
+  position: relative;
   width: 100%;
-}
-
-.live-wrapper iframe {
+  background: #000;
   border: 3px solid var(--red);
-  display: block;
-  max-width: 100%;
-  width: 100%;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
+.creator-featured:hover {
+  box-shadow: 0 0 30px rgba(230,57,70,0.3), inset 0 0 20px rgba(230,57,70,0.1);
+}
+
+.creator-featured-header {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(230,57,70,0.1) 0%, rgba(29,53,87,0.1) 100%);
+  border-bottom: 2px solid rgba(230,57,70,0.3);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.creator-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.creator-info {
+  flex: 1;
+}
+
+.creator-name {
+  font-family: 'Barlow Condensed';
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: white;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+.creator-level {
+  font-size: 0.9rem;
+  color: var(--gold);
+  margin-top: 0.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.creator-status-badge {
+  background: var(--red);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  animation: pulse 2s ease-in-out infinite;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.creator-embed-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.creator-embed-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.no-featured-creators {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(230,57,70,0.05);
+  border: 2px dashed rgba(230,57,70,0.2);
+  border-radius: 8px;
+  color: rgba(241,250,238,0.6);
+}
+
+.no-featured-creators i {
+  font-size: 3rem;
+  color: var(--red);
+  margin-bottom: 1rem;
+  display: block;
+  opacity: 0.5;
+}
+
+.no-featured-creators p {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+/* ============================================
+   LIVE CTA
+   ============================================ */
 .live-cta {
   text-align: center;
   padding: 2rem;
@@ -1156,6 +1262,31 @@ footer {
     font-size: 1rem;
   }
 
+  .creator-featured-header {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .creator-avatar {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+  }
+
+  .creator-name {
+    font-size: 1.1rem;
+  }
+
+  .creator-level {
+    font-size: 0.85rem;
+  }
+
+  .creator-status-badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+
   .hero-logo { 
     max-width: 350px; 
   }
@@ -1209,15 +1340,23 @@ footer {
     letter-spacing: 1px;
   }
 
-  .live-wrapper {
-    border-width: 2px;
-  }
-
   .live-cta {
     padding: 1.5rem;
   }
 
   .live-cta p {
+    font-size: 1rem;
+  }
+
+  .no-featured-creators {
+    padding: 2rem 1.5rem;
+  }
+
+  .no-featured-creators i {
+    font-size: 2rem;
+  }
+
+  .no-featured-creators p {
     font-size: 1rem;
   }
 
