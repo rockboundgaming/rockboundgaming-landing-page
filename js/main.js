@@ -90,152 +90,137 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-//   FEATURED CREATORS FROM GOOGLE SHEET
+//   LOAD FEATURED CREATORS FROM GOOGLE SHEET
 // ============================================
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg/pub?output=csv";
 
-async function fetchFeaturedCreators() {
+async function loadFeaturedCreators() {
+  const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg/pub?output=csv";
+
   try {
-    const response = await fetch(sheetURL);
-    const csv = await response.text();
-    
-    const lines = csv.trim().split('\n');
-    let allCreators = [];
-    
-    // Skip header row and parse data
-    for (let i = 1; i < lines.length; i++) {
-      const cols = lines[i].split(',').map(col => col.trim());
-      
-      // Only process rows with enough columns
-      if (cols.length >= 6) {
-        allCreators.push({
-          twitch: cols[0],
-          name: cols[1],
-          level: parseInt(cols[2]),
-          hours: cols[3],
-          featured: cols[4],
-          status: cols[5]
-        });
-      }
-    }
-    
-    // Remove duplicates and filter by requirements
+    const response = await fetch(url);
+    const data = await response.text();
+
+    const rows = data.split("\n").slice(1); // remove header
+
+    const creators = rows.map(row => {
+      const cols = row.split(",");
+
+      return {
+        twitch: cols[0]?.trim(),
+        name: cols[1]?.trim(),
+        level: parseInt(cols[2]),
+        hours: cols[3]?.trim(),
+        featured: cols[4]?.trim(),
+        status: cols[5]?.trim(),
+        eligible: cols[7]?.trim()
+      };
+    }).filter(c => c.twitch && c.name); // filter out empty rows
+
+    // Remove duplicates
+    const uniqueCreators = [];
     const seen = new Set();
-    const featuredCreators = allCreators.filter(c => {
+
+    const featuredCreators = creators.filter(c => {
       const key = c.twitch.toLowerCase();
-      
-      // Skip if duplicate
+
       if (seen.has(key)) return false;
       seen.add(key);
-      
-      // Only show if: Level >= 5 AND Featured = "yes" AND Status = "active"
+
       return (
         c.level >= 5 &&
-        c.featured.toLowerCase() === "yes" &&
-        c.status.toLowerCase() === "active"
+        c.featured === "Yes" &&
+        c.status === "Active"
       );
     });
-    
+
+    console.log("Featured Creators:", featuredCreators);
     displayFeaturedCreators(featuredCreators);
-    
-  } catch (error) {
-    console.error('Error loading creators:', error);
-    displayNoCreators();
+
+  } catch (err) {
+    console.error("Error loading creators:", err);
   }
 }
 
+// ============================================
+//   DISPLAY CREATORS
+// ============================================
+
 function displayFeaturedCreators(creators) {
-  const container = document.getElementById('creator-list');
-  
+  const container = document.getElementById("twitch-embed");
+
   if (!container) {
-    console.error('creator-list container not found');
+    console.error("twitch-embed container not found");
     return;
   }
-  
+
   if (creators.length === 0) {
-    displayNoCreators();
+    container.innerHTML = `
+      <div class="no-featured-creators">
+        <i class="fas fa-video"></i>
+        <p>No featured creators streaming right now</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Reach Level 5 in Discord to get featured!</p>
+      </div>
+    `;
     return;
   }
-  
-  container.innerHTML = '';
-  
-  creators.forEach(creator => {
-    // Determine if we're on localhost or live domain
+
+  container.innerHTML = creators.map(c => {
     const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     
     let embedHTML = '';
     
     if (isDevelopment) {
-      // Show placeholder during development
       embedHTML = `
         <div class="creator-embed-placeholder">
           <div class="placeholder-content">
             <i class="fas fa-play-circle"></i>
             <h4>Twitch Embed Preview</h4>
-            <p>${creator.name} is ${creator.status}</p>
+            <p>${c.name} - Level ${c.level}</p>
+            <p>Active</p>
             <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">
               Live embeds work on production domain
             </p>
-            <a href="https://twitch.tv/${creator.twitch}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="margin-top: 1rem; display: inline-block;">
+            <a href="https://twitch.tv/${c.twitch}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="margin-top: 1rem; display: inline-block;">
               Watch on Twitch
             </a>
           </div>
         </div>
       `;
     } else {
-      // Live embed for production
       embedHTML = `
-        <div class="creator-embed-wrapper">
-          <iframe
-            src="https://twitch.tv/embed/${creator.twitch}?parent=${window.location.hostname}"
-            height="500"
-            width="100%"
-            frameborder="0"
-            scrolling="no"
-            allowfullscreen="true">
-          </iframe>
-        </div>
+        <iframe
+          src="https://twitch.tv/embed/${c.twitch}?parent=${window.location.hostname}"
+          height="500"
+          width="100%"
+          frameborder="0"
+          scrolling="no"
+          allowfullscreen="true">
+        </iframe>
       `;
     }
-    
-    const creatorHTML = `
+
+    return `
       <div class="creator-featured">
         <div class="creator-featured-header">
           <div class="creator-avatar">
             <i class="fas fa-user"></i>
           </div>
           <div class="creator-info">
-            <h3 class="creator-name">${creator.name}</h3>
-            <p class="creator-level">Level ${creator.level}</p>
+            <h3 class="creator-name">${c.name}</h3>
+            <p class="creator-level">Level ${c.level}</p>
           </div>
           <div class="creator-status-badge">
-            ${creator.status}
+            Active
           </div>
         </div>
         ${embedHTML}
       </div>
     `;
-    
-    container.innerHTML += creatorHTML;
-  });
+  }).join("");
 }
 
-function displayNoCreators() {
-  const container = document.getElementById('creator-list');
-  
-  if (!container) return;
-  
-  container.innerHTML = `
-    <div class="no-featured-creators">
-      <i class="fas fa-video"></i>
-      <p>No featured creators streaming right now</p>
-      <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon or join our Discord!</p>
-    </div>
-  `;
-}
-
-// Fetch creators when page loads
-document.addEventListener('DOMContentLoaded', fetchFeaturedCreators);
+// RUN on page load
+document.addEventListener('DOMContentLoaded', loadFeaturedCreators);
 
 // Refresh every 5 minutes
-setInterval(fetchFeaturedCreators, 300000);
+setInterval(loadFeaturedCreators, 300000);
