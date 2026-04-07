@@ -178,10 +178,8 @@ nav {
   flex-wrap: wrap;
   width: 100vw;
   position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  left: calc(-50vw + 50%);
+  margin: 0;
 }
 
 .hero-stats .stat-item { 
