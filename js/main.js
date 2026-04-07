@@ -90,6 +90,32 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
+//   CHECK IF CREATOR IS LIVE ON TWITCH
+// ============================================
+
+async function isCreatorLive(twitchUsername) {
+  try {
+    const clientId = "YOUR_TWITCH_CLIENT_ID";
+    const accessToken = "YOUR_TWITCH_ACCESS_TOKEN";
+
+    const response = await fetch(`https://api.twitch.tv/helix/streams?user_login=${twitchUsername}`, {
+      headers: {
+        "Client-ID": clientId,
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    if (!response.ok) return false;
+
+    const data = await response.json();
+    return data.data && data.data.length > 0;
+  } catch (err) {
+    console.error(`Error checking if ${twitchUsername} is live:`, err);
+    return false;
+  }
+}
+
+// ============================================
 //   LOAD FEATURED CREATORS FROM GOOGLE SHEET
 // ============================================
 
@@ -134,10 +160,19 @@ async function loadFeaturedCreators() {
       if (seen.has(key)) return false;
       seen.add(key);
 
-      return c.level >= 5 && c.featured === "Yes" && c.status === "Active";
+      return c.level >= 5 && c.featured === "Yes";
     });
 
-    displayFeaturedCreators(featuredCreators);
+    // Check if each creator is actually live on Twitch
+    const liveCreators = [];
+    for (const creator of featuredCreators) {
+      const isLive = await isCreatorLive(creator.twitch);
+      if (isLive) {
+        liveCreators.push(creator);
+      }
+    }
+
+    displayFeaturedCreators(liveCreators);
 
   } catch (err) {
     console.error("Error loading creators:", err);
@@ -174,7 +209,7 @@ function displayFeaturedCreators(creators) {
             <i class="fas fa-play-circle"></i>
             <h4>Twitch Embed Preview</h4>
             <p>${c.name} - Level ${c.level}</p>
-            <p>Active</p>
+            <p>LIVE</p>
             <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 1rem;">
               Live embeds work on production domain
             </p>
@@ -204,7 +239,7 @@ function displayFeaturedCreators(creators) {
             <p class="creator-level">Level ${c.level}</p>
           </div>
           <div class="creator-status-badge">
-            Active
+            LIVE
           </div>
         </div>
         ${embedHTML}
