@@ -86,9 +86,7 @@ nav {
   transition: all 0.3s ease;
 }
 
-nav.scrolled {
-  box-shadow: 0 10px 30px rgba(230,57,70,0.2);
-}
+nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
 
 .nav-logo {
   font-family: 'Bebas Neue';
@@ -743,7 +741,6 @@ section:nth-child(odd) {
   color: var(--gold);
   margin-top: 0.5rem;
   font-weight: 600;
-  margin: 0;
 }
 
 .creator-status-badge {
@@ -1039,11 +1036,9 @@ footer {
   .nav-links.active { display: flex; }
   .nav-links a { font-size: 0.9rem; padding: 0.8rem; }
   
-  /* FIX ABOUT SECTION */
   .about-grid { 
     grid-template-columns: 1fr; 
     gap: 2rem;
-    margin-bottom: 2rem;
   }
   
   .about-cards { 
@@ -1051,21 +1046,13 @@ footer {
     gap: 1.5rem;
   }
   
-  .about-text { 
-    width: 100%;
-    margin-bottom: 2rem;
-  }
-  
   .about-text p { 
     font-size: 1.1rem;
     padding: 1rem;
-    margin-bottom: 1rem;
   }
   
-  /* FIX CARDS */
   .card {
     padding: 1.5rem;
-    margin-bottom: 1rem;
   }
   
   .card h4 { font-size: 1rem; }
@@ -1074,7 +1061,6 @@ footer {
   .community-desc { 
     font-size: 1.1rem;
     padding: 1.5rem;
-    margin-bottom: 2rem;
   }
   
   .section-tag { font-size: 0.95rem; }
@@ -1082,35 +1068,29 @@ footer {
   .creator-intro { 
     font-size: 1.1rem;
     padding: 1rem;
-    margin-bottom: 2rem;
   }
   
   .creator-perks { 
     grid-template-columns: 1fr; 
     gap: 1.5rem;
-    margin-bottom: 2rem;
   }
   
   .creator-perks-bottom { 
     grid-template-columns: 1fr; 
     max-width: 100%;
-    margin-bottom: 2rem;
   }
   
   .perk-card { 
     padding: 1.5rem; 
     gap: 1rem;
-    margin-bottom: 1rem;
   }
   
   .roadmap-grid { 
     grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
   
   .roadmap-item {
     padding: 1.5rem;
-    margin-bottom: 1rem;
   }
   
   .hero-logo { max-width: 350px; }
@@ -1119,12 +1099,10 @@ footer {
   .hero-stats { 
     gap: 1.5rem; 
     padding: 1.5rem;
-    flex-wrap: wrap;
   }
   
   .stat-item {
     flex: 0 0 calc(50% - 1rem);
-    min-width: auto;
   }
   
   .stat-number { font-size: 1.5rem; }
@@ -1132,7 +1110,6 @@ footer {
   
   .community-features { 
     grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
   
   .feature-card:last-child {
@@ -1142,12 +1119,6 @@ footer {
   
   .platforms-grid { 
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  
-  .platform-card {
-    padding: 1.5rem;
-    margin-bottom: 1rem;
   }
   
   .btn-primary { 
@@ -1169,31 +1140,23 @@ footer {
   .cta-btns .btn-white,
   .cta-btns .btn-dark {
     width: 100%;
-    padding: 0.9rem 1.5rem;
   }
   
   .live-cta { 
     padding: 1.5rem;
-    margin-bottom: 1rem;
   }
   
   .live-cta p { font-size: 1rem; }
   
   .no-featured-creators { 
     padding: 2rem 1.5rem;
-    margin-bottom: 1rem;
   }
   
   .no-featured-creators i { font-size: 2rem; }
   .no-featured-creators p { font-size: 1rem; }
   
-  .creator-featured {
-    margin-bottom: 1.5rem;
-  }
-  
   .creator-featured-header {
     padding: 1rem;
-    flex-wrap: wrap;
   }
   
   .creator-name { font-size: 1.1rem; }
@@ -1201,7 +1164,5 @@ footer {
   
   footer { padding: 3rem 1.5rem 2rem; }
   .footer-links { gap: 1.5rem; }
-  .footer-links a { gap: 0.3rem; }
   .footer-links a i { font-size: 1.2rem; }
-  .footer-links a span { font-size: 0.7rem; }
 }
