@@ -435,6 +435,35 @@ section {
 }
 
 /* ============================================
+   CARD ICONS
+   ============================================ */
+.card-icon {
+  font-size: 3rem;
+  color: var(--red);
+  margin-bottom: 1rem;
+  display: block;
+  transition: all 0.3s;
+}
+
+.about-card:hover .card-icon {
+  color: var(--gold);
+  transform: scale(1.15);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  color: var(--red);
+  margin-bottom: 1rem;
+  display: block;
+  transition: all 0.3s;
+}
+
+.feature-card:hover .feature-icon {
+  color: var(--gold);
+  transform: scale(1.1);
+}
+
+/* ============================================
    CARDS
    ============================================ */
 .about-card {
@@ -474,10 +503,6 @@ section {
   font-size: 0.85rem;
   color: rgba(241,250,238,0.6);
   line-height: 1.5;
-}
-
-.about-card div:first-child {
-  font-size: 2rem;
 }
 
 /* ============================================
@@ -524,6 +549,13 @@ section {
 .perk-icon {
   font-size: 1.5rem;
   flex-shrink: 0;
+  color: var(--red);
+  transition: all 0.3s;
+}
+
+.perks-list li:hover .perk-icon {
+  color: var(--gold);
+  transform: scale(1.1);
 }
 
 .perks-list li strong {
@@ -611,12 +643,6 @@ section {
   border-color: rgba(230,57,70,0.4);
 }
 
-.feature-emoji {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  display: block;
-}
-
 .feature-card h4 {
   font-family: 'Barlow Condensed';
   font-size: 1.1rem;
@@ -677,6 +703,7 @@ section {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
   display: block;
+  transition: all 0.3s;
 }
 
 .platform-icon .fa-discord { color: #5865F2; }
@@ -684,8 +711,9 @@ section {
 .platform-icon .fa-tiktok { color: white; }
 .platform-icon .fa-facebook { color: #1877F2; }
 
-.platform-card:hover .platform-icon i { 
-  filter: brightness(1.3); 
+.platform-card:hover .platform-icon {
+  transform: scale(1.2);
+  filter: brightness(1.3);
 }
 
 .platform-name {
@@ -941,6 +969,14 @@ footer {
 
   .section-tag {
     font-size: 0.95rem;
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+  }
+
+  .feature-icon {
+    font-size: 2rem;
   }
 
   .hero-logo { 
