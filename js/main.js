@@ -94,36 +94,45 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 
 async function loadFeaturedCreators() {
-  const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg/pub?output=csv";
+  const sheetId = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
+  const url = `https://docs.google.com/spreadsheets/d/e/${sheetId}/pub?output=tsv`;
 
   try {
-    const response = await fetch(url, {
-      method: 'GET',
-      mode: 'no-cors'
-    });
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const data = await response.text();
 
-    console.log("RAW DATA:", data);
-    console.log("FIRST 200 CHARS:", data.substring(0, 200));
+    console.log("RAW DATA:", data.substring(0, 300));
 
-    const rows = data.split("\n").slice(1);
-    console.log("TOTAL ROWS:", rows.length);
-    console.log("FIRST ROW:", rows[0]);
+    const rows = data.split("\n");
+    console.log("TOTAL ROWS (including header):", rows.length);
+    console.log("HEADER ROW:", rows[0]);
+    console.log("FIRST DATA ROW:", rows[1]);
 
-    const creators = rows.map(row => {
-      const cols = row.split("\t");
-      console.log("PARSED ROW:", cols);
+    // Skip header row (index 0)
+    const creators = rows
+      .slice(1)
+      .map(row => {
+        if (!row.trim()) return null;
+        
+        const cols = row.split("\t");
+        console.log("PARSED COLS:", cols);
 
-      return {
-        twitch: cols[0]?.trim(),
-        name: cols[1]?.trim(),
-        level: parseInt(cols[2]),
-        hours: cols[3]?.trim(),
-        featured: cols[4]?.trim(),
-        status: cols[5]?.trim(),
-        eligible: cols[7]?.trim()
-      };
-    }).filter(c => c.twitch && c.name);
+        return {
+          twitch: cols[0]?.trim(),
+          name: cols[1]?.trim(),
+          level: parseInt(cols[2]),
+          hours: cols[3]?.trim(),
+          featured: cols[4]?.trim(),
+          status: cols[5]?.trim(),
+          eligible: cols[7]?.trim()
+        };
+      })
+      .filter(c => c && c.twitch && c.name);
 
     console.log("CREATORS ARRAY:", creators);
 
@@ -135,13 +144,13 @@ async function loadFeaturedCreators() {
       if (seen.has(key)) return false;
       seen.add(key);
 
-      console.log(`Checking: ${c.name} - Level: ${c.level}, Featured: ${c.featured}, Status: ${c.status}`);
+      const isLevel5Plus = c.level >= 5;
+      const isFeatured = c.featured === "Yes";
+      const isActive = c.status === "Active";
 
-      return (
-        c.level >= 5 &&
-        c.featured === "Yes" &&
-        c.status === "Active"
-      );
+      console.log(`Checking: ${c.name} | Level ${c.level} (${isLevel5Plus ? '✓' : '✗'}) | Featured: "${c.featured}" (${isFeatured ? '✓' : '✗'}) | Status: "${c.status}" (${isActive ? '✓' : '✗'})`);
+
+      return isLevel5Plus && isFeatured && isActive;
     });
 
     console.log("Featured Creators:", featuredCreators);
