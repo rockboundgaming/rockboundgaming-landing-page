@@ -106,7 +106,7 @@ async function loadFeaturedCreators() {
     const rows = data.split("\n").slice(1);
 
     const creators = rows.map(row => {
-      const cols = row.split(",");
+      const cols = row.split("\t");
 
       return {
         twitch: cols[0]?.trim(),
