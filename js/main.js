@@ -94,12 +94,14 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 
 async function loadFeaturedCreators() {
-  const url = "https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg/pub?output=csv";
+  const sheetId = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
+  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+
   try {
     const response = await fetch(url);
     const data = await response.text();
 
-    const rows = data.split("\n").slice(1); // remove header
+    const rows = data.split("\n").slice(1);
 
     const creators = rows.map(row => {
       const cols = row.split(",");
@@ -113,9 +115,8 @@ async function loadFeaturedCreators() {
         status: cols[5]?.trim(),
         eligible: cols[7]?.trim()
       };
-    }).filter(c => c.twitch && c.name); // filter out empty rows
+    }).filter(c => c.twitch && c.name);
 
-    // Remove duplicates
     const uniqueCreators = [];
     const seen = new Set();
 
@@ -137,6 +138,7 @@ async function loadFeaturedCreators() {
 
   } catch (err) {
     console.error("Error loading creators:", err);
+    displayNoCreators();
   }
 }
 
@@ -153,13 +155,7 @@ function displayFeaturedCreators(creators) {
   }
 
   if (creators.length === 0) {
-    container.innerHTML = `
-      <div class="no-featured-creators">
-        <i class="fas fa-video"></i>
-        <p>No featured creators streaming right now</p>
-        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Reach Level 5 in Discord to get featured!</p>
-      </div>
-    `;
+    displayNoCreators();
     return;
   }
 
@@ -216,6 +212,20 @@ function displayFeaturedCreators(creators) {
       </div>
     `;
   }).join("");
+}
+
+function displayNoCreators() {
+  const container = document.getElementById("twitch-embed");
+
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="no-featured-creators">
+      <i class="fas fa-video"></i>
+      <p>No featured creators streaming right now</p>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem;">Reach Level 5 in Discord to get featured!</p>
+    </div>
+  `;
 }
 
 // RUN on page load
