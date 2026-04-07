@@ -96,69 +96,56 @@ const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR_A_KNK2zWNA
 
 async function fetchFeaturedCreators() {
   try {
+    console.log('🔄 Fetching from:', sheetURL);
     const response = await fetch(sheetURL);
     const csv = await response.text();
     
-    // Parse CSV
     const lines = csv.trim().split('\n');
-    let creators = [];
+    console.log('Total lines in CSV:', lines.length);
+    console.log('Raw CSV data:', csv);
     
-    // Skip header row (row 0)
+    let allCreators = [];
+    
     for (let i = 1; i < lines.length; i++) {
       const cols = lines[i].split(',').map(col => col.trim());
+      console.log(`Row ${i} columns:`, cols);
       
-      if (cols.length < 5) continue; // Skip incomplete rows
-      
-      const twitchName = cols[0]?.trim();
-      const displayName = cols[1]?.trim();
-      const level = parseInt(cols[2]) || 0;
-      const status = cols[3]?.trim();
-      const featured = cols[4]?.trim();
-      
-      if (twitchName) {
-        creators.push({
-          twitch: twitchName,
-          name: displayName,
-          level: level,
-          status: status,
-          featured: featured
+      if (cols.length >= 5) {
+        allCreators.push({
+          twitch: cols[0],
+          name: cols[1],
+          level: parseInt(cols[2]),
+          status: cols[3],
+          featured: cols[4]
         });
       }
     }
     
-    // Remove duplicates using Set
-    const seen = new Set();
+    console.log('All creators found:', allCreators);
     
-    const featuredCreators = creators.filter(c => {
+    const seen = new Set();
+    const featuredCreators = allCreators.filter(c => {
       const key = c.twitch.toLowerCase();
-      
-      // Skip if already seen (removes duplicates)
       if (seen.has(key)) return false;
       seen.add(key);
       
-      // Only show if Level >= 5 AND Featured = "Yes" AND Status = "Active"
-      return (
-        c.level >= 5 &&
-        c.featured?.trim().toLowerCase() === "yes" &&
-        c.status?.trim().toLowerCase() === "active"
-      );
+      const passes = c.level >= 5 && c.featured.toLowerCase() === "yes" && c.status.toLowerCase() === "active";
+      console.log(`Creator: ${c.twitch} | Level: ${c.level} | Status: ${c.status} | Featured: ${c.featured} | PASSES: ${passes}`);
+      return passes;
     });
     
+    console.log('Final featured creators:', featuredCreators);
     displayFeaturedCreators(featuredCreators);
     
   } catch (error) {
-    console.error('Error loading creators:', error);
+    console.error('Error:', error);
     displayNoCreators();
   }
 }
 
 function displayFeaturedCreators(creators) {
   const container = document.getElementById('creator-list');
-  
-  if (!container) {
-    console.error('creator-list container not found');
-    return;
-  }
+  if (!container) return;
   
   if (creators.length === 0) {
     displayNoCreators();
@@ -203,7 +190,6 @@ function displayFeaturedCreators(creators) {
 
 function displayNoCreators() {
   const container = document.getElementById('creator-list');
-  
   if (!container) return;
   
   container.innerHTML = `
@@ -217,13 +203,6 @@ function displayNoCreators() {
   console.log('ℹ️ No featured creators at this time');
 }
 
-// Fetch creators when page loads
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('🔄 Fetching featured creators...');
-  fetchFeaturedCreators();
-});
-
-// Refresh every 5 minutes
+document.addEventListener('DOMContentLoaded', fetchFeaturedCreators);
 setInterval(fetchFeaturedCreators, 300000);
-
 console.log('✅ Creator script loaded');
