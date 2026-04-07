@@ -780,18 +780,30 @@ section:nth-child(odd) {
 }
 
 /* ============================================
-   MOBILE CREATOR CARD
+   TWITCH PLAYER LINK
    ============================================ */
-.mobile-creator-card {
+.twitch-player-link {
+  display: block;
   padding: 1.5rem;
-  background: rgba(230,57,70,0.05);
+  background: linear-gradient(135deg, #9146ff 0%, #6d28d9 100%);
+  border-radius: 4px;
   text-align: center;
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
-.mobile-creator-card .btn-primary {
-  width: 100%;
-  padding: 1rem 1.5rem;
-  font-size: 0.9rem;
+.twitch-player-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(145, 70, 255, 0.3);
+}
+
+.twitch-player-link i {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  display: block;
 }
 
 /* ============================================
@@ -1088,8 +1100,8 @@ footer {
 
   /* HERO MOBILE */
   .hero {
-    padding: 4rem 1rem 6rem;
-    padding-bottom: 8rem;
+    padding: 3rem 1rem 6rem;
+    padding-bottom: 12rem;
   }
 
   .hero-logo { 
@@ -1358,6 +1370,16 @@ footer {
     margin: 0.3rem 0;
   }
 
+  .twitch-player-link {
+    padding: 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .twitch-player-link i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
   .live-cta { 
     padding: 1.2rem;
   }
@@ -1518,6 +1540,7 @@ footer {
 
   .hero {
     padding: 3rem 0.8rem 6rem;
+    padding-bottom: 12rem;
   }
 
   .hero-logo { 
