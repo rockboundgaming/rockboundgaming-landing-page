@@ -137,52 +137,71 @@ async function loadFeaturedCreators() {
 }
 
 // ============================================
-//   DISPLAY CREATORS
+//   DISPLAY CREATORS WITH TWITCH API
 // ============================================
 
 function displayFeaturedCreators(creators) {
   const container = document.getElementById("twitch-embed");
+  if (!container) return;
 
-  if (!container) {
-    console.error("twitch-embed container not found");
-    return;
-  }
+  // Clear container only once
+  container.innerHTML = "";
 
-  const domain = window.location.hostname;
-
-  // Build HTML for all featured creators
-  container.innerHTML = creators.map(c => {
-    return `
-      <div class="creator-featured">
+  // Load Twitch embed script first
+  loadTwitchScript(() => {
+    creators.forEach(c => {
+      // 1. Create the wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'creator-featured';
+      wrapper.id = `wrapper-${c.twitch}`;
+      
+      wrapper.innerHTML = `
         <div class="creator-featured-header">
-          <div class="creator-avatar">
-            <i class="fas fa-user"></i>
-          </div>
+          <div class="creator-avatar"><i class="fas fa-user"></i></div>
           <div class="creator-info">
             <h3 class="creator-name">${c.name}</h3>
             <p class="creator-level">Level ${c.level}</p>
           </div>
-          <div class="creator-status-badge">
-            LIVE
-          </div>
+          <div class="creator-status-badge">LIVE</div>
         </div>
-        <div class="twitch-embed-container" style="min-height: 500px;">
-          <iframe
-            src="https://player.twitch.tv/?channel=${c.twitch}&parent=${domain}&autoplay=true&muted=true"
-            height="500"
-            width="100%"
-            allowfullscreen="true"
-            style="width: 100%; height: 500px; border: none; overflow: hidden;">
-          </iframe>
-        </div>
-      </div>
-    `;
-  }).join("");
+        <div id="player-${c.twitch}" class="twitch-embed-container" style="min-height: 500px;"></div>
+      `;
+      
+      container.appendChild(wrapper);
+
+      // 2. Initialize the Twitch Player API
+      setTimeout(() => {
+        try {
+          const player = new Twitch.Player(`player-${c.twitch}`, {
+            channel: c.twitch,
+            width: "100%",
+            height: 500,
+            parent: [window.location.hostname],
+            autoplay: true,
+            muted: true
+          });
+
+          // 3. LISTEN FOR OFFLINE EVENT - Fast stop
+          player.addEventListener(Twitch.Player.OFFLINE, () => {
+            console.log(`${c.twitch} went offline, removing player immediately.`);
+            wrapper.remove();
+            
+            // If no other creators are left, show the "No one is live" card
+            if (container.children.length === 0) {
+              displayNoCreators();
+            }
+          });
+        } catch (err) {
+          console.error(`Error initializing player for ${c.twitch}:`, err);
+          wrapper.remove();
+        }
+      }, 100);
+    });
+  });
 }
 
 function displayNoCreators() {
   const container = document.getElementById("twitch-embed");
-
   if (!container) return;
 
   container.innerHTML = `
@@ -194,14 +213,33 @@ function displayNoCreators() {
   `;
 }
 
+function loadTwitchScript(callback) {
+  if (window.twitchScriptLoaded) {
+    callback();
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.src = 'https://embed.twitch.tv/embed/v1.js';
+  script.async = true;
+  script.onload = () => {
+    window.twitchScriptLoaded = true;
+    callback();
+  };
+  script.onerror = () => {
+    console.error('Failed to load Twitch embed script');
+  };
+  document.body.appendChild(script);
+}
+
 // ============================================
 //   REFRESH HANDLERS
 // ============================================
 
 document.addEventListener('DOMContentLoaded', loadFeaturedCreators);
 
-// Refresh every 30 seconds to detect status changes
-setInterval(loadFeaturedCreators, 30000);
+// Refresh every 60 seconds to check for new streamers
+setInterval(loadFeaturedCreators, 60000);
 
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
