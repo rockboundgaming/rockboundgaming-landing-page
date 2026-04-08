@@ -182,20 +182,16 @@ function displayFeaturedCreators(creators) {
         </div>
         <div class="twitch-embed-container" style="min-height: 500px;">
           <iframe
-            src="https://twitch.tv/embed/${c.twitch}?parent=${domain}"
+            src="https://player.twitch.tv/?channel=${c.twitch}&parent=${domain}&autoplay=true&muted=true"
             height="500"
             width="100%"
-            frameborder="0"
-            scrolling="no"
             allowfullscreen="true"
-            style="width: 100%; height: 500px;">
+            style="width: 100%; height: 500px; border: none; overflow: hidden;">
           </iframe>
         </div>
       </div>
     `;
   }).join("");
-
-  loadTwitchScript();
 }
 
 function displayNoCreators() {
@@ -210,21 +206,6 @@ function displayNoCreators() {
       <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon for featured creators!</p>
     </div>
   `;
-}
-
-function loadTwitchScript() {
-  if (window.twitchEmbedLoaded) return;
-  
-  const script = document.createElement('script');
-  script.src = 'https://embed.twitch.tv/embed/v1.js';
-  script.async = true;
-  script.onload = () => {
-    if (window.Twitch && window.Twitch.Embed) {
-      window.Twitch.Embed.lib.render(document.getElementById("twitch-embed"));
-    }
-  };
-  document.body.appendChild(script);
-  window.twitchEmbedLoaded = true;
 }
 
 // ============================================
