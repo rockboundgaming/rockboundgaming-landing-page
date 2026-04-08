@@ -226,7 +226,9 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   color: var(--silver-light);
   font-weight: 700;
   font-family: 'Barlow Condensed';
-  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
   animation: fadeUp 1s ease forwards 0.3s both;
 }
 
@@ -1136,7 +1138,6 @@ footer {
 
   .authority-line {
     font-size: 1.1rem;
-    order: 4;
   }
 
   .hero-stats {
@@ -1343,7 +1344,6 @@ footer {
 
   .authority-line {
     font-size: 0.95rem;
-    order: 4;
   }
 
   .hero-stats {
