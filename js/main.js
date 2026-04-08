@@ -8,7 +8,7 @@ function debounce(func, wait) {
   return function executedFunction(...args) {
     const later = () => {
       clearTimeout(timeout);
-      func(...args);
+      func(*args);
     };
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
@@ -213,7 +213,12 @@ function addStreamer(c) {
       </div>
       <div class="creator-status-badge">LIVE</div>
     </div>
-    <div id="player-${c.twitch}" class="twitch-embed-container"></div>
+    <div id="player-${c.twitch}" class="twitch-embed-container">
+      <div class="stream-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading stream...</p>
+      </div>
+    </div>
   `;
   container.appendChild(wrapper); // Append hidden
 
@@ -248,7 +253,12 @@ function addStreamer(c) {
         console.log(`${c.twitch} came ONLINE`);
         hasStartedPlayback = true;
         clearTimeout(offlineTimeout);
-        wrapper.style.display = 'block'; // Show only when confirmed live
+        wrapper.style.display = 'block'; // Show the card
+        // Hide loading after a short delay to ensure stream starts
+        setTimeout(() => {
+          const loading = wrapper.querySelector('.stream-loading');
+          if (loading) loading.style.display = 'none';
+        }, 1000);
       });
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
