@@ -228,6 +228,9 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   font-family: 'Barlow Condensed';
   margin-bottom: 2rem;
   animation: fadeUp 1s ease forwards 0.3s both;
+  position: relative;
+  z-index: 2;
+  text-align: center;
 }
 
 .hero-stats {
@@ -1113,6 +1116,10 @@ footer {
     min-height: 100svh;
   }
 
+  .hero-content {
+    flex: 0 0 auto;
+  }
+
   .hero-logo {
     max-width: 400px;
   }
@@ -1136,7 +1143,12 @@ footer {
 
   .authority-line {
     font-size: 1.1rem;
-    order: 4;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    padding: 1.5rem 1rem;
   }
 
   .hero-stats {
@@ -1343,7 +1355,7 @@ footer {
 
   .authority-line {
     font-size: 0.95rem;
-    order: 4;
+    padding: 1.2rem 0.8rem;
   }
 
   .hero-stats {
