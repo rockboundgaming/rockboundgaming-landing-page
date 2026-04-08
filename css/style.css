@@ -1191,6 +1191,11 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .feature-card:last-child {
+    max-width: 100%;
+    margin: 0;
+  }
+
   .creator-perks,
   .creator-perks-bottom {
     grid-template-columns: 1fr;
