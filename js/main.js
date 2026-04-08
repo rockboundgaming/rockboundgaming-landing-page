@@ -93,6 +93,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 //   GLOBAL STATE & CONFIG
 // ============================================
 let activePlayers = new Map();
+let lastLiveUsernames = new Set();
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
 
 // ============================================
@@ -136,13 +137,25 @@ async function loadFeaturedCreators() {
 }
 
 // ============================================
-//   CORE DISPLAY LOGIC (OPTIMIZED)
+//   CORE DISPLAY LOGIC (ONLY UPDATE IF CHANGED)
 // ============================================
 function updateDisplay(liveNow) {
   const container = document.getElementById("twitch-embed");
   if (!container) return;
 
   const incomingUsernames = new Set(liveNow.map(c => c.twitch));
+
+  // Only update if the set of live users has CHANGED
+  const usernamesChanged = 
+    incomingUsernames.size !== lastLiveUsernames.size ||
+    ![...incomingUsernames].every(u => lastLiveUsernames.has(u));
+
+  if (!usernamesChanged) {
+    // No changes - don't touch the players!
+    return;
+  }
+
+  lastLiveUsernames = incomingUsernames;
 
   // 1. Remove streamers who are no longer Live
   activePlayers.forEach((player, username) => {
@@ -237,6 +250,7 @@ function removeStreamer(username) {
   const el = document.getElementById(`wrapper-${username}`);
   if (el) el.remove();
   activePlayers.delete(username);
+  lastLiveUsernames.delete(username);
   
   const container = document.getElementById("twitch-embed");
   if (container && container.children.length === 0) displayNoCreators();
