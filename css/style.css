@@ -1119,7 +1119,6 @@ footer {
 
   .hero-tagline-text {
     font-size: clamp(1.8rem, 5vw, 3rem);
-    margin-top: auto;
     margin-bottom: 1rem;
   }
 
@@ -1318,7 +1317,6 @@ footer {
 
   .hero-tagline-text {
     font-size: clamp(1.3rem, 4vw, 2.2rem);
-    margin-top: auto;
     margin-bottom: 0.8rem;
   }
 
