@@ -170,5 +170,106 @@ function updateDisplay(liveNow) {
 function addStreamer(c) {
   const container = document.getElementById("twitch-embed");
   
-  // Load Twitch script immediately (not
-
+  // Load Twitch script immediately
+  loadTwitchScript();
+  
+  // Create HTML structure IMMEDIATELY
+  const wrapper = document.createElement('div');
+  wrapper.className = 'creator-featured'; 
+  wrapper.id = `wrapper-${c.twitch}`;
+  wrapper.innerHTML = `
+    <div class="creator-featured-header">
+      <div class="creator-avatar"><i class="fas fa-user"></i></div>
+      <div class="creator-info">
+        <h3 class="creator-name">${c.name}</h3>
+        <p class="creator-level">Level ${c.level}</p>
+      </div>
+      <div class="creator-status-badge">LIVE</div>
+    </div>
+    <div id="player-${c.twitch}" class="twitch-embed-container"></div>
+  `;
+  container.appendChild(wrapper);
+
+  // Initialize player with minimal delay
+  setTimeout(() => {
+    try {
+      if (!window.Twitch || !window.Twitch.Player) {
+        console.error("Twitch Player not loaded yet");
+        return;
+      }
+
+      const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
+      
+      const player = new Twitch.Player(`player-${c.twitch}`, {
+        channel: c.twitch,
+        width: "100%",
+        height: 350,
+        parent: [hostname],
+        autoplay: true,
+        muted: true
+      });
+
+      // Only remove on OFFLINE if stream was actually showing
+      let hasStartedPlayback = false;
+      
+      if (player.addEventListener) {
+        player.addEventListener(Twitch.Player.ONLINE, () => {
+          hasStartedPlayback = true;
+        });
+
+        player.addEventListener(Twitch.Player.OFFLINE, () => {
+          // Only remove if it actually played, not on initial load
+          if (hasStartedPlayback) {
+            removeStreamer(c.twitch);
+          }
+        });
+      }
+
+      activePlayers.set(c.twitch, player);
+    } catch (e) {
+      console.error("Player Init Error:", e);
+      removeStreamer(c.twitch);
+    }
+  }, 10);
+}
+
+function removeStreamer(username) {
+  const el = document.getElementById(`wrapper-${username}`);
+  if (el) el.remove();
+  activePlayers.delete(username);
+  
+  const container = document.getElementById("twitch-embed");
+  if (container && container.children.length === 0) displayNoCreators();
+}
+
+function displayNoCreators() {
+  const container = document.getElementById("twitch-embed");
+  if (!container) return;
+  container.innerHTML = `
+    <div class="no-featured-creators">
+      <i class="fas fa-video"></i>
+      <p>No one is live right now</p>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon for featured creators!</p>
+    </div>
+  `;
+}
+
+let twitchScriptLoading = false;
+
+function loadTwitchScript() {
+  if (window.Twitch && window.Twitch.Player) return;
+  if (twitchScriptLoading) return;
+  
+  twitchScriptLoading = true;
+  const script = document.createElement('script');
+  script.src = 'https://player.twitch.tv/js/embed/v1.js';
+  script.async = true;
+  script.onerror = () => console.error('Failed to load Twitch script');
+  document.body.appendChild(script);
+}
+
+// ============================================
+//   INITIALIZE
+// ============================================
+document.addEventListener('DOMContentLoaded', loadFeaturedCreators);
+setInterval(loadFeaturedCreators, 60000);
