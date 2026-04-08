@@ -1,14 +1,105 @@
-/ ============================================
+// ============================================
+//   SCROLL ANIMATIONS WITH DEBOUNCE
+// ============================================
+const reveals = document.querySelectorAll('.reveal');
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function reveal() {
+  reveals.forEach(element => {
+    const windowHeight = window.innerHeight;
+    const revealTop = element.getBoundingClientRect().top;
+    const revealPoint = 150;
+
+    if (revealTop < windowHeight - revealPoint) {
+      element.classList.add('visible');
+    }
+  });
+}
+
+window.addEventListener('scroll', debounce(reveal, 100));
+reveal();
+
+// ============================================
+//   NAV SCROLL EFFECT WITH THROTTLE
+// ============================================
+const nav = document.querySelector('nav');
+let ticking = false;
+
+function updateNav() {
+  if (window.scrollY > 100) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+  ticking = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    window.requestAnimationFrame(updateNav);
+    ticking = true;
+  }
+});
+
+// ============================================
+//   MOBILE MENU TOGGLE
+// ============================================
+const menuToggle = document.querySelector('.menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+    });
+  });
+}
+
+// ============================================
+//   SMOOTH SCROLL FOR ANCHOR LINKS
+// ============================================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    const href = this.getAttribute('href');
+    if (href === '#') return;
+    
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+
+// ============================================
 //   GLOBAL STATE & CONFIG
 // ============================================
-let activePlayers = new Map(); // [username -> PlayerObject]
+let activePlayers = new Map();
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
 
 // ============================================
 //   LOAD DATA FROM GOOGLE SHEET
 // ============================================
 async function loadFeaturedCreators() {
-  const url = `https://google.com{SHEET_ID}/pub?output=tsv&cb=${Date.now()}`;
+  const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=tsv&cb=${Date.now()}`;
 
   try {
     const response = await fetch(url);
@@ -27,7 +118,7 @@ async function loadFeaturedCreators() {
         featured: cols[4]?.trim(),
         status: cols[5]?.trim()
       };
-    }).filter(c => c && c.twitch);
+    }).filter(c => c && c.twitch && c.name);
 
     const liveNow = creators.filter(c => 
       c.level >= 5 && 
@@ -39,6 +130,7 @@ async function loadFeaturedCreators() {
 
   } catch (err) {
     console.error("Error loading creators:", err);
+    displayNoCreators();
   }
 }
 
@@ -80,7 +172,7 @@ function addStreamer(c) {
   loadTwitchScript(() => {
     // Create the HTML structure
     const wrapper = document.createElement('div');
-    wrapper.className = 'creator-featured visible'; 
+    wrapper.className = 'creator-featured'; 
     wrapper.id = `wrapper-${c.twitch}`;
     wrapper.innerHTML = `
       <div class="creator-featured-header">
@@ -91,7 +183,7 @@ function addStreamer(c) {
         </div>
         <div class="creator-status-badge">LIVE</div>
       </div>
-      <div id="player-${c.twitch}" class="twitch-embed-container" style="height: 500px; width: 100%; background: #000;"></div>
+      <div id="player-${c.twitch}" class="twitch-embed-container"></div>
     `;
     container.appendChild(wrapper);
 
@@ -103,20 +195,24 @@ function addStreamer(c) {
         const player = new Twitch.Player(`player-${c.twitch}`, {
           channel: c.twitch,
           width: "100%",
-          height: 500,
+          height: 350,
           parent: [hostname],
           autoplay: true,
           muted: true
         });
 
-        // The instant removal logic
-        player.addEventListener(Twitch.Player.OFFLINE, () => {
-          removeStreamer(c.twitch);
-        });
+        // Listen for OFFLINE event
+        if (player.addEventListener) {
+          player.addEventListener(Twitch.Player.OFFLINE, () => {
+            console.log(`${c.twitch} went offline`);
+            removeStreamer(c.twitch);
+          });
+        }
 
         activePlayers.set(c.twitch, player);
       } catch (e) {
         console.error("Player Init Error:", e);
+        removeStreamer(c.twitch);
       }
     }, 50);
   });
@@ -138,6 +234,7 @@ function displayNoCreators() {
     <div class="no-featured-creators">
       <i class="fas fa-video"></i>
       <p>No one is live right now</p>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check back soon for featured creators!</p>
     </div>
   `;
 }
@@ -145,8 +242,9 @@ function displayNoCreators() {
 function loadTwitchScript(callback) {
   if (window.Twitch && window.Twitch.Player) return callback();
   const script = document.createElement('script');
-  script.src = 'https://player.twitch.tv/js/embed/v1.js'; // Use the dedicated player script
+  script.src = 'https://player.twitch.tv/js/embed/v1.js';
   script.onload = callback;
+  script.onerror = () => console.error('Failed to load Twitch script');
   document.body.appendChild(script);
 }
 
@@ -154,4 +252,4 @@ function loadTwitchScript(callback) {
 //   INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', loadFeaturedCreators);
-setInterval(loadFeaturedCreators, 60000); // Check spreadsheet every minute
+setInterval(loadFeaturedCreators, 60000);
