@@ -1129,6 +1129,7 @@ footer {
 
   .hero-btns {
     order: 3;
+    flex-wrap: nowrap;
     margin-top: auto;
     margin-bottom: 0;
   }
@@ -1336,6 +1337,7 @@ footer {
   .hero-btns {
     order: 3;
     gap: 0.8rem;
+    flex-wrap: nowrap;
     margin-top: auto;
     margin-bottom: 0;
   }
