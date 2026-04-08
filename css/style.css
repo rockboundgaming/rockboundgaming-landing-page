@@ -782,12 +782,12 @@ section:nth-child(odd) {
 }
 
 /* ============================================
-   TWITCH EMBED
+   TWITCH EMBED - FIXED HEIGHT
    ============================================ */
 .twitch-embed-container {
   position: relative;
   width: 100%;
-  padding-top: 56.25%;
+  height: 350px;
   margin-top: 1rem;
   border-radius: 8px;
   overflow: hidden;
@@ -1012,6 +1012,11 @@ footer {
   opacity: 0.7;
 }
 
+.footer-copy {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
 /* ============================================
    RESPONSIVE TABLET
    ============================================ */
@@ -1038,13 +1043,16 @@ footer {
     grid-template-columns: 1fr;
     max-width: 100%;
   }
+
+  .twitch-embed-container {
+    height: 300px;
+  }
 }
 
 /* ============================================
    RESPONSIVE MOBILE 768px
    ============================================ */
 @media (max-width: 768px) {
-  /* Hamburger Menu Mobile */
   .menu-toggle {
     display: block !important;
   }
@@ -1080,7 +1088,6 @@ footer {
     display: block;
   }
 
-  /* Hero Section Mobile */
   .hero {
     padding: 6rem 2rem 0;
     padding-bottom: 0;
@@ -1108,7 +1115,6 @@ footer {
     margin-bottom: 1rem;
   }
 
-  /* Stats Bar Mobile */
   .hero-stats {
     position: relative;
     width: 100%;
@@ -1134,7 +1140,6 @@ footer {
     margin-top: 0.3rem;
   }
 
-  /* Buttons Mobile */
   .btn-primary,
   .btn-white,
   .btn-dark,
@@ -1143,7 +1148,6 @@ footer {
     font-size: 0.9rem;
   }
 
-  /* Sections Mobile */
   section {
     padding: 3rem 1.5rem;
   }
@@ -1152,7 +1156,6 @@ footer {
     font-size: clamp(1.8rem, 5vw, 3rem);
   }
 
-  /* Text Mobile */
   .about-text p {
     font-size: 1.1rem;
     padding: 0.8rem;
@@ -1163,7 +1166,6 @@ footer {
     padding: 1.5rem;
   }
 
-  /* Grid Layouts Mobile */
   .about-cards {
     grid-template-columns: 1fr;
   }
@@ -1180,7 +1182,6 @@ footer {
     gap: 0.8rem;
   }
 
-  /* Cards Mobile */
   .card {
     padding: 1.2rem;
   }
@@ -1197,7 +1198,6 @@ footer {
     font-size: 2.5rem;
   }
 
-  /* Perk Cards Mobile */
   .perk-card {
     padding: 1.5rem;
     gap: 1rem;
@@ -1211,7 +1211,6 @@ footer {
     font-size: 0.95rem;
   }
 
-  /* Roadmap Mobile */
   .roadmap-item {
     padding: 1.2rem;
   }
@@ -1228,7 +1227,6 @@ footer {
     font-size: 1rem;
   }
 
-  /* Platform Cards Mobile */
   .platform-card {
     padding: 1.5rem;
   }
@@ -1241,7 +1239,6 @@ footer {
     font-size: 0.85rem;
   }
 
-  /* CTA Section Mobile */
   .cta-section {
     padding: 3rem 1.5rem;
   }
@@ -1263,7 +1260,6 @@ footer {
     gap: 1rem;
   }
 
-  /* Footer Mobile */
   footer {
     padding: 2.5rem 1.5rem 2rem;
   }
@@ -1280,9 +1276,8 @@ footer {
     font-size: 0.75rem;
   }
 
-  /* Twitch Embed Mobile */
   .twitch-embed-container {
-    min-height: 300px;
+    height: 250px;
   }
 }
 
@@ -1315,7 +1310,6 @@ footer {
     margin-bottom: 0.8rem;
   }
 
-  /* Stats Bar Mobile */
   .hero-stats {
     position: relative;
     margin-top: auto;
@@ -1383,8 +1377,7 @@ footer {
     padding: 2rem 1rem;
   }
 
-  /* Twitch Embed Mobile */
   .twitch-embed-container {
-    min-height: 250px;
+    height: 200px;
   }
 }
