@@ -93,17 +93,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 //   TWITCH LIVE STREAMS
 // ============================================
 let activePlayers = new Map();
-let mobileTimeouts = new Map(); // username -> mobile-fallback timeout ID
 let lastLiveUsernames = new Set();
 let recentlyRemoved = new Map(); // username -> removal timestamp
 const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4ej8-JnxaMuD0AxIYt6roaKJsg";
-// How long to wait on mobile before assuming the stream is live when SDK events
-// don't fire (common on Android Chrome).
-const MOBILE_SDK_FALLBACK_MS = 5000;
-
-function isMobile() {
-  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-}
 
 // Load Twitch script once at startup
 function initTwitchScript() {
@@ -239,9 +231,9 @@ function addStreamer(c) {
   const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
 
   // Use the Twitch JS SDK on all platforms for a consistent look and behavior.
-  // The wrapper starts hidden and is revealed only when the ONLINE event fires
-  // (or the mobile fallback assumes live), so the "no one is streaming" placeholder
-  // stays visible until the stream is confirmed.
+  // The wrapper starts hidden and is revealed only when the ONLINE event fires,
+  // so the "no one is streaming" placeholder stays visible until the stream is
+  // confirmed live — no flicker, no premature reveal on slow connections.
   try {
     if (!window.Twitch || !window.Twitch.Player) {
       console.error("Twitch Player not available");
@@ -270,8 +262,6 @@ function addStreamer(c) {
         console.log(`${c.twitch} came ONLINE`);
         hasStartedPlayback = true;
         clearTimeout(offlineTimeout);
-        clearTimeout(mobileTimeouts.get(c.twitch));
-        mobileTimeouts.delete(c.twitch);
         // Stream confirmed live: reveal the player and remove the placeholder.
         wrapper.style.display = '';
         const noCard = container.querySelector('.no-featured-creators');
@@ -285,42 +275,20 @@ function addStreamer(c) {
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
         console.log(`${c.twitch} went OFFLINE`);
-        clearTimeout(mobileTimeouts.get(c.twitch));
-        mobileTimeouts.delete(c.twitch);
         removeStreamer(c.twitch);
       });
     }
 
-    // On mobile, SDK events (ONLINE/OFFLINE) may not fire reliably on some
-    // Android browsers. After a short fallback delay, hide the loading spinner
-    // and mark playback as started so the player is not torn down by the
-    // offline timeout. We trust the spreadsheet data that the stream is live.
-    if (isMobile()) {
-      const mobileFallback = setTimeout(() => {
-        mobileTimeouts.delete(c.twitch);
-        if (!hasStartedPlayback) {
-          console.log(`${c.twitch} mobile fallback — assuming live, hiding spinner`);
-          hasStartedPlayback = true;
-          clearTimeout(offlineTimeout);
-          // Reveal the player and remove the "no one is streaming" placeholder.
-          wrapper.style.display = '';
-          const noCard = container.querySelector('.no-featured-creators');
-          if (noCard) noCard.remove();
-          const loading = wrapper.querySelector('.stream-loading');
-          if (loading) loading.style.display = 'none';
-        }
-      }, MOBILE_SDK_FALLBACK_MS);
-      mobileTimeouts.set(c.twitch, mobileFallback);
-    }
-
-    // Auto-remove if stream doesn't go online within 10 seconds
+    // Auto-remove if stream doesn't go online within 15 seconds.
+    // Using 15 s (up from 10 s) gives slow Android connections extra time to
+    // receive the ONLINE event before we give up and clean up the hidden player.
     offlineTimeout = setTimeout(() => {
       offlineTimeout = null;
       if (!hasStartedPlayback) {
         console.log(`${c.twitch} timeout - removing player`);
         removeStreamer(c.twitch);
       }
-    }, 10000);
+    }, 15000);
 
     activePlayers.set(c.twitch, player);
     console.log(`Player initialized for ${c.twitch}`);
@@ -331,8 +299,6 @@ function addStreamer(c) {
 }
 
 function removeStreamer(username) {
-  clearTimeout(mobileTimeouts.get(username));
-  mobileTimeouts.delete(username);
   const el = document.getElementById(`wrapper-${username}`);
   if (el) el.remove();
   activePlayers.delete(username);
