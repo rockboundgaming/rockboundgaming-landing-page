@@ -31,7 +31,7 @@ jobs:
             -d "client_secret=${TWITCH_CLIENT_SECRET}" \
             -d "grant_type=client_credentials")
 
-          ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['access_token'])")
+          ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin).get('access_token', ''))")
 
           if [ -z "$ACCESS_TOKEN" ]; then
             echo "Failed to obtain access token: $TOKEN_RESPONSE"
@@ -68,7 +68,7 @@ for s in data['data']:
     })
 
 output = {
-    'lastChecked': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+    'lastChecked': datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
     'live': live
 }
 
