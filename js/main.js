@@ -100,6 +100,11 @@ const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4e
 // The primary channel that is permanently embedded (24/7).
 const ROCKBOUND_CHANNEL = "rockboundgaming";
 
+// Correct display names for creators whose spreadsheet entries have typos.
+const NAME_OVERRIDES = {
+  'eastcoastflacko': 'Eastcoastflacko'
+};
+
 // ============================================
 //   DISCORD WIDGET
 // ============================================
@@ -165,9 +170,10 @@ async function loadFeaturedCreators() {
     const creators = rows.slice(1).map(row => {
       if (!row.trim()) return null;
       const cols = row.split("\t");
+      const twitch = cols[0]?.trim()?.toLowerCase();
       return {
-        twitch: cols[0]?.trim()?.toLowerCase(), 
-        name: cols[1]?.trim(),
+        twitch,
+        name: NAME_OVERRIDES[twitch] || cols[1]?.trim(),
         level: parseInt(cols[2]),
         featured: cols[4]?.trim(),
         status: cols[5]?.trim()?.toLowerCase()
@@ -221,21 +227,18 @@ function updateUnifiedHub(allLive, serverLiveUsernames) {
   const offlineEl = document.getElementById('offline-player');
   const liveGrid = document.getElementById('live-streams-grid');
   const panel = document.getElementById('twitch-panel');
-  const badge = document.getElementById('live-badge');
   const titleEl = document.getElementById('panel-stream-title');
 
   if (allLive.length > 0) {
     if (offlineEl) offlineEl.hidden = true;
     if (liveGrid) liveGrid.hidden = false;
     if (panel) panel.classList.add('is-live');
-    if (badge) badge.hidden = false;
     if (titleEl) titleEl.textContent = allLive.length === 1 ? allLive[0].name : 'Rock Hub Live';
     updateDisplay(allLive, serverLiveUsernames);
   } else {
     if (offlineEl) offlineEl.hidden = false;
     if (liveGrid) liveGrid.hidden = true;
     if (panel) panel.classList.remove('is-live');
-    if (badge) badge.hidden = true;
     if (titleEl) titleEl.textContent = 'RockboundGaming';
     displayNoCreators();
     initOfflinePlayer();
@@ -388,11 +391,9 @@ function removeStreamer(username) {
     container.hidden = true;
     const offlineEl = document.getElementById('offline-player');
     const panel = document.getElementById('twitch-panel');
-    const badge = document.getElementById('live-badge');
     const titleEl = document.getElementById('panel-stream-title');
     if (offlineEl) offlineEl.hidden = false;
     if (panel) panel.classList.remove('is-live');
-    if (badge) badge.hidden = true;
     if (titleEl) titleEl.textContent = 'RockboundGaming';
     initOfflinePlayer();
   }
