@@ -410,30 +410,9 @@ setInterval(fetchDiscordMembers, 3 * 60 * 1000);
 //   PERMANENT TWITCH PLAYER (RockboundGaming)
 // ============================================
 function initPermanentPlayer() {
-  const container = document.getElementById('permanent-twitch-embed');
-  if (!container || !window.Twitch || !window.Twitch.Player) return;
-
-  const hostname = window.location.hostname || 'localhost';
-
-  try {
-    const player = new Twitch.Player('permanent-twitch-embed', {
-      channel: ROCKBOUND_CHANNEL,
-      width: '100%',
-      height: '100%',
-      parent: [hostname],
-      autoplay: true,
-      muted: true
-    });
-
-    if (player.addEventListener) {
-      player.addEventListener(Twitch.Player.READY, () => {
-        const loading = document.getElementById('permanent-loading');
-        if (loading) loading.style.display = 'none';
-      });
-    }
-  } catch (e) {
-    console.error('Permanent player init error:', e);
-  }
+  // The permanent player is embedded directly as an <iframe> in the HTML,
+  // so it is always visible without depending on the Twitch JS SDK.
+  // No SDK initialization is required here.
 }
 
 // ============================================
