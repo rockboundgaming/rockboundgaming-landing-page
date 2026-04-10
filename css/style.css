@@ -924,7 +924,9 @@ section:nth-child(odd) {
   flex-direction: column;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid rgba(230,57,70,0.25);
+  border: 1px solid #8B0000;
+  box-shadow: 0 0 8px rgba(139,0,0,0.45);
+  max-height: 280px;
   /* Diamond / trellis pattern tied to the 3-D wall-panel theme */
   background-color: #0d1017;
   background-image:
@@ -1549,7 +1551,7 @@ footer {
     flex: none;
     width: 100%;
     min-height: 160px;
-    max-height: 260px;
+    max-height: 200px;
   }
 }
 
