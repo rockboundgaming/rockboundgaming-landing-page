@@ -411,29 +411,22 @@ setInterval(fetchDiscordMembers, 3 * 60 * 1000);
 // ============================================
 function initPermanentPlayer() {
   const container = document.getElementById('permanent-twitch-embed');
-  if (!container || !window.Twitch || !window.Twitch.Player) return;
+  if (!container) return;
 
   const hostname = window.location.hostname || 'localhost';
 
-  try {
-    const player = new Twitch.Player('permanent-twitch-embed', {
-      channel: ROCKBOUND_CHANNEL,
-      width: '100%',
-      height: '100%',
-      parent: [hostname],
-      autoplay: true,
-      muted: true
-    });
+  // Inject an iframe directly so the player is always visible — even when
+  // the channel is offline Twitch shows its standard offline screen.
+  // This avoids any display:none / conditional-logic hiding.
+  const iframe = document.createElement('iframe');
+  const safeHostname = encodeURIComponent(hostname);
+  iframe.src = `https://player.twitch.tv/?channel=${ROCKBOUND_CHANNEL}&parent=${safeHostname}&autoplay=true&muted=true`;
+  iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;overflow:hidden;';
+  iframe.setAttribute('allowfullscreen', 'true');
+  container.appendChild(iframe);
 
-    if (player.addEventListener) {
-      player.addEventListener(Twitch.Player.READY, () => {
-        const loading = document.getElementById('permanent-loading');
-        if (loading) loading.style.display = 'none';
-      });
-    }
-  } catch (e) {
-    console.error('Permanent player init error:', e);
-  }
+  const loading = document.getElementById('permanent-loading');
+  if (loading) loading.style.display = 'none';
 }
 
 // ============================================
