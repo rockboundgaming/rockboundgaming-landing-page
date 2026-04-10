@@ -284,7 +284,7 @@ function addStreamer(c, serverConfirmedLive = false) {
   wrapper.innerHTML = `
     <div class="panel-header">
       <span class="panel-title">
-        <i class="fas fa-user"></i> ${escapeHtml(c.name)}<span class="creator-level-tag">Lv.${c.level}</span>
+        <i class="fas fa-user"></i> ${escapeHtml(c.name)}<span class="creator-level-tag">Lv.${escapeHtml(String(c.level))}</span>
       </span>
       <span class="live-badge" style="display:inline-block">🔴 LIVE</span>
     </div>
@@ -505,9 +505,10 @@ function renderDiscordMembers(members, count) {
   if (!list) return;
 
   // Filter out bots — check the bot flag and known bot usernames.
-  const humanMembers = members.filter(m =>
-    !m.bot && !KNOWN_BOTS.has(m.username?.toLowerCase())
-  );
+  const humanMembers = members.filter(m => {
+    if (m.bot) return false;
+    return !m.username || !KNOWN_BOTS.has(m.username.toLowerCase());
+  });
 
   if (countEl) {
     countEl.textContent = count > 0 ? `${count} online` : '';
