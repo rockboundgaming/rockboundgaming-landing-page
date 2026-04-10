@@ -510,8 +510,9 @@ function renderDiscordMembers(members, count) {
     if (m.bot) return false;
     const nameLower = (m.username || '').toLowerCase();
     if (KNOWN_BOTS.includes(nameLower)) return false;
+    // Roles may be objects {name, id, …} or plain strings depending on the API version.
     if (Array.isArray(m.roles) &&
-        m.roles.some(r => ((r.name || r) + '').toLowerCase() === 'bot')) return false;
+        m.roles.some(r => (typeof r === 'object' ? r.name || '' : r).toLowerCase() === 'bot')) return false;
     return true;
   });
 
