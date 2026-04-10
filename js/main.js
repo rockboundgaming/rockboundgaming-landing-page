@@ -109,6 +109,13 @@ const ROCKBOUND_CHANNEL = "rockboundgaming";
 //   3. Paste it below.
 const DISCORD_GUILD_ID = "1482393227146559518"; // Rockbound Gaming Discord server
 
+// Well-known bot usernames to exclude from the member list when the Discord
+// Widget API does not expose a `bot` flag for a particular account.
+const KNOWN_BOTS = ['mee6', 'dyno', 'streamelements', 'carl-bot', 'yagpdb.xyz',
+                    'groovy', 'rythm', 'tatsu', 'hydra', 'chip', 'fredboat',
+                    'mudae', 'pokecord', 'arcane', 'statbot', 'sesh',
+                    'apollo', 'pancake', 'ticket tool', 'autorole'];
+
 // How long (ms) the server-side status file is considered fresh.
 // The GitHub Actions workflow runs every 5 minutes, so 10 minutes gives
 // comfortable headroom before we fall back to the spreadsheet status column.
@@ -497,7 +504,18 @@ function renderDiscordMembers(members, count) {
     countEl.textContent = count > 0 ? `${count} online` : '';
   }
 
-  if (members.length === 0) {
+  // Filter out bots: remove members flagged by the API, with a known bot name,
+  // or assigned a role literally named "bot".
+  const humanMembers = members.filter(m => {
+    if (m.bot) return false;
+    const nameLower = (m.username || '').toLowerCase();
+    if (KNOWN_BOTS.includes(nameLower)) return false;
+    if (Array.isArray(m.roles) &&
+        m.roles.some(r => ((r.name || r) + '').toLowerCase() === 'bot')) return false;
+    return true;
+  });
+
+  if (humanMembers.length === 0) {
     list.innerHTML = `
       <li class="discord-empty-item">
         <i class="fab fa-discord" style="font-size:1.4rem;color:rgba(230,57,70,0.5);"></i>
@@ -508,9 +526,9 @@ function renderDiscordMembers(members, count) {
 
   // Sort: online → idle → dnd
   const order = { online: 0, idle: 1, dnd: 2 };
-  members.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
+  humanMembers.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
 
-  list.innerHTML = members.map(m => {
+  list.innerHTML = humanMembers.map(m => {
     const avatarSrc = m.avatar_url || '/assets/logos/favcon.jpg';
     const game = m.game
       ? `<span class="member-game">${escapeHtml(m.game.name)}</span>`
