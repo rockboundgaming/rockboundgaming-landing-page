@@ -812,6 +812,7 @@ section:nth-child(odd) {
 /* Side-by-side layout; Discord panel stretches to match player height */
 .control-center {
   display: flex;
+  flex-wrap: wrap;
   gap: 1.25rem;
   align-items: stretch;
   margin-bottom: 2rem;
@@ -821,8 +822,7 @@ section:nth-child(odd) {
 /* ---- Twitch Panel ---- */
 .twitch-panel {
   flex: 1 1 0;
-  min-width: 0;
-  min-height: 420px;
+  min-width: min(100%, 600px);
   background: #000;
   border-radius: 8px;
   overflow: hidden;
@@ -839,7 +839,6 @@ section:nth-child(odd) {
 
 /* Remove the default margin/radius on the embed container inside the panel */
 #permanent-twitch-embed {
-  flex: 1;
   margin-top: 0;
   border-radius: 0;
 }
@@ -889,6 +888,7 @@ section:nth-child(odd) {
 .discord-panel {
   flex: 0 0 280px;
   min-width: 0;
+  max-height: 600px;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -920,6 +920,7 @@ section:nth-child(odd) {
 .discord-members-list {
   flex: 1;
   overflow-y: auto;
+  max-height: 500px;
   padding: 0.4rem 0.5rem;
   list-style: none;
   margin: 0;
@@ -1225,6 +1226,21 @@ footer {
 }
 
 /* ============================================
+   RESPONSIVE MID-DESKTOP 1200px
+   ============================================ */
+@media (max-width: 1200px) {
+  /* Reduce nav link size on mid-range desktops/tablets to prevent logo overlap */
+  .nav-links {
+    gap: 2rem;
+  }
+
+  .nav-links a {
+    font-size: 1.2rem;
+    letter-spacing: 1.5px;
+  }
+}
+
+/* ============================================
    RESPONSIVE TABLET
    ============================================ */
 @media (max-width: 1024px) {
@@ -1249,6 +1265,18 @@ footer {
   .creator-perks-bottom {
     grid-template-columns: 1fr;
     max-width: 100%;
+  }
+}
+
+/* ============================================
+   RESPONSIVE NARROW DESKTOP 960px
+   (Discord panel wraps below Twitch player)
+   ============================================ */
+@media (max-width: 960px) {
+  .discord-panel {
+    flex: none;
+    width: 100%;
+    max-height: 300px;
   }
 }
 
