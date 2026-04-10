@@ -421,7 +421,7 @@ function initPermanentPlayer() {
       width: '100%',
       height: '100%',
       parent: [hostname],
-      autoplay: false,
+      autoplay: true,
       muted: true
     });
 
