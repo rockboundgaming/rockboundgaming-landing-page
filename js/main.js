@@ -230,11 +230,18 @@ function updateUnifiedHub(allLive, serverLiveUsernames) {
   const panel = document.getElementById('twitch-panel');
   const titleEl = document.getElementById('panel-stream-title');
 
-  if (allLive.length > 0) {
+  // Only server-confirmed live creators should drive the visible UI state
+  // (title, is-live styling, offline vs. live player).  Spreadsheet-only
+  // "active" entries are still passed to updateDisplay so the Twitch ONLINE
+  // event can reveal them later — but they must not cause a premature title
+  // flash while the page is loading.
+  const confirmedLive = allLive.filter(c => serverLiveUsernames.has(c.twitch));
+
+  if (confirmedLive.length > 0) {
     if (offlineEl) offlineEl.hidden = true;
     if (liveGrid) liveGrid.hidden = false;
     if (panel) panel.classList.add('is-live');
-    if (titleEl) titleEl.textContent = allLive.length === 1 ? allLive[0].name : 'Rock Hub Live';
+    if (titleEl) titleEl.textContent = confirmedLive.length === 1 ? confirmedLive[0].name : 'Rock Hub Live';
     updateDisplay(allLive, serverLiveUsernames);
   } else {
     if (offlineEl) offlineEl.hidden = false;
