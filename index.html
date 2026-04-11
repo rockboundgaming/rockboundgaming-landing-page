@@ -196,52 +196,7 @@
     </div>
 
     <div class="creator-cta">
-      <button class="btn-primary apply-creator-btn">Apply To Be A Creator</button>
-    </div>
-
-    <!-- Creator Network Application Form -->
-    <div class="creator-application">
-      <div class="section-tag">Apply Now</div>
-      <h3 class="creator-apply-title">JOIN THE CREATOR NETWORK</h3>
-      <p class="creator-apply-desc">Ready to create? Fill out the form below and our team will reach out through Discord.</p>
-
-      <form id="creator-application-form" class="creator-form card" novalidate>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="creator-name">Name</label>
-            <input type="text" id="creator-name" name="name" required placeholder="Your full name" maxlength="100">
-          </div>
-          <div class="form-group">
-            <label for="creator-gamertag">Gamertag</label>
-            <input type="text" id="creator-gamertag" name="gamertag" required placeholder="Your gamertag" maxlength="64">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="creator-platform">Primary Platform</label>
-            <select id="creator-platform" name="platform" required>
-              <option value="" disabled selected>Select your platform</option>
-              <option value="PC">PC</option>
-              <option value="Xbox">Xbox</option>
-              <option value="PlayStation">PlayStation</option>
-              <option value="Mobile">Mobile</option>
-              <option value="Multiple Platforms">Multiple Platforms</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="creator-games">Primary Games</label>
-            <input type="text" id="creator-games" name="games" required placeholder="e.g. Fortnite, Warzone, Minecraft" maxlength="200">
-          </div>
-        </div>
-        <div id="creator-form-status" class="creator-form-status" hidden></div>
-        <div class="form-group captcha-group">
-          <label for="creator-captcha" id="captcha-label">Verification</label>
-          <input type="number" id="creator-captcha" name="captcha" required placeholder="Enter your answer" autocomplete="off" min="0" max="99">
-        </div>
-        <!-- honeypot: must remain empty -->
-        <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="submit" class="btn-primary">Submit Application</button>
-      </form>
+      <a href="https://discord.gg/SsrHttHX8n" target="_blank" rel="noopener noreferrer" class="btn-primary">JOIN DISCORD</a>
     </div>
   </div>
 </section>
@@ -466,6 +421,54 @@
   
   <div class="footer-copy">© 2026 Rockbound Gaming</div>
 </footer>
+
+<!-- CREATOR APPLICATION MODAL -->
+<div id="creator-modal" class="creator-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="creator-modal-title" hidden>
+  <div class="creator-modal">
+    <button class="creator-modal-close" id="creator-modal-close" aria-label="Close">&times;</button>
+    <div class="section-tag">Apply Now</div>
+    <h3 class="creator-apply-title" id="creator-modal-title">JOIN THE CREATOR NETWORK</h3>
+    <p class="creator-apply-desc">Ready to create? Fill out the form below and our team will reach out through Discord.</p>
+
+    <form id="creator-application-form" class="creator-form" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="creator-name">Name</label>
+          <input type="text" id="creator-name" name="name" required placeholder="Your full name" maxlength="100">
+        </div>
+        <div class="form-group">
+          <label for="creator-gamertag">Gamertag</label>
+          <input type="text" id="creator-gamertag" name="gamertag" required placeholder="Your gamertag" maxlength="64">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="creator-platform">Primary Platform</label>
+          <select id="creator-platform" name="platform" required>
+            <option value="" disabled selected>Select your platform</option>
+            <option value="PC">PC</option>
+            <option value="Xbox">Xbox</option>
+            <option value="PlayStation">PlayStation</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Multiple Platforms">Multiple Platforms</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="creator-games">Primary Games</label>
+          <input type="text" id="creator-games" name="games" required placeholder="e.g. Fortnite, Warzone, Minecraft" maxlength="200">
+        </div>
+      </div>
+      <div id="creator-form-status" class="creator-form-status" hidden></div>
+      <div class="form-group captcha-group">
+        <label for="creator-captcha" id="captcha-label">Verification</label>
+        <input type="number" id="creator-captcha" name="captcha" required placeholder="Enter your answer" autocomplete="off" min="0" max="99">
+      </div>
+      <!-- honeypot: must remain empty -->
+      <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" class="btn-primary">Submit Application</button>
+    </form>
+  </div>
+</div>
 
 <script src="/js/main.min.js?v=203" defer></script>
 
