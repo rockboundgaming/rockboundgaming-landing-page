@@ -101,10 +101,7 @@ const SHEET_ID = "2PACX-1vQR_A_KNK2zWNAYiT-a3baVWUSt8-_SE83gnyt4rOLDRruj0E-SVg4e
 const ROCKBOUND_CHANNEL = "rockboundgaming";
 
 // Correct display names for creators whose spreadsheet entries have typos.
-const NAME_OVERRIDES = {
-  'eastcoastflacko': 'Eastcoastflacko',
-  'eastcoastflax': 'Eastcoastflacko'
-};
+const NAME_OVERRIDES = {};
 
 // ============================================
 //   DISCORD WIDGET
@@ -234,7 +231,7 @@ function updateUnifiedHub(allLive, serverLiveUsernames) {
     if (offlineEl) offlineEl.hidden = true;
     if (liveGrid) liveGrid.hidden = false;
     if (panel) panel.classList.add('is-live');
-    if (titleEl) titleEl.textContent = allLive.length === 1 ? allLive[0].name : 'Rock Hub Live';
+    if (titleEl) titleEl.textContent = allLive.length === 1 ? allLive[0].name : 'Rockbound Gaming';
     updateDisplay(allLive, serverLiveUsernames);
   } else {
     if (offlineEl) offlineEl.hidden = false;
@@ -447,6 +444,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initTwitchScript();
   await loadFeaturedCreators();
   fetchDiscordMembers();
+  initApplyButton();
 });
 
 setInterval(loadFeaturedCreators, 60000);
@@ -690,4 +688,27 @@ function showFormStatus(el, type, message) {
   el.className = `creator-form-status ${type}`;
   el.hidden = false;
   setTimeout(() => { el.hidden = true; }, 6000);
+}
+
+// ============================================
+//   APPLY TO BE A CREATOR — TOGGLE
+// ============================================
+function initApplyButton() {
+  const formContainer = document.querySelector('.creator-application');
+  if (!formContainer) return;
+
+  document.querySelectorAll('.apply-creator-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = formContainer.classList.contains('open');
+      if (isOpen) {
+        formContainer.classList.remove('open');
+      } else {
+        formContainer.classList.add('open');
+        setTimeout(() => {
+          formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
+      }
+    });
+  });
 }

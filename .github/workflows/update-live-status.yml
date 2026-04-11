@@ -43,7 +43,7 @@ jobs:
           curl -s \
             -H "Client-ID: ${TWITCH_CLIENT_ID}" \
             -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-            "https://api.twitch.tv/helix/streams?user_login=eastcoastflacko&user_login=rockboundgaming" \
+            "https://api.twitch.tv/helix/streams?user_login=rockboundgaming" \
             > /tmp/streams.json
 
           echo "Twitch API response:"
