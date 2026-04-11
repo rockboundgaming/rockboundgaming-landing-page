@@ -804,6 +804,23 @@ section:nth-child(odd) {
    COMMUNITY CONTROL CENTER
    ============================================ */
 
+/* Make the live section span the full viewport width */
+#live {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Re-apply horizontal indentation to the text headers and CTA inside #live */
+#live .section-tag {
+  margin-left: 2rem;
+}
+#live .section-title,
+#live .live-cta {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 /* Glow pulse animation for live state */
 @keyframes liveGlow {
   0%, 100% { box-shadow: 0 0 15px rgba(230,57,70,0.4), 0 0 40px rgba(230,57,70,0.15); }
