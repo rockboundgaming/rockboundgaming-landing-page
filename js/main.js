@@ -193,15 +193,14 @@ async function loadFeaturedCreators() {
       }
     }
 
-    // Community live creators: level >= 5, featured, live, excluding the main channel.
+    // Community live creators: level >= 5, featured, server-confirmed live, excluding the main channel.
+    // Only use serverLiveUsernames from live-status.json — the spreadsheet status column
+    // is not used as a fallback to avoid ghost entries from stale data.
     const communityLiveNow = creators.filter(c =>
       c.level >= 5 &&
       c.featured?.toLowerCase() === "yes" &&
       c.twitch !== ROCKBOUND_CHANNEL &&
-      (
-        serverLiveUsernames.has(c.twitch) ||
-        c.status === "live" || c.status === "active"
-      )
+      serverLiveUsernames.has(c.twitch)
     );
 
     // Build unified live list: Rockbound first (if live), then community (up to 4 total).
@@ -527,11 +526,11 @@ function renderDiscordMembers(members, count) {
   if (!list) return;
 
   // Filter out bots: explicit bot flag, known bot usernames, or "bot" in name.
-  const KNOWN_BOTS = ['carl-bot', 'mee6', 'dyno', 'groovy', 'rhythm', 'rythm', 'fredboat', 'nightbot', 'streamelements', 'streamlabs'];
+  const EXCLUDED_BOTS = ['carl-bot', 'mee6', 'dyno', 'groovy', 'rhythm', 'rythm', 'fredboat', 'nightbot', 'streamelements', 'streamlabs', 'arcane'];
   const humanMembers = members.filter(m => {
     if (m.bot === true) return false;
     const nameLower = m.username.toLowerCase();
-    if (KNOWN_BOTS.some(bot => nameLower.includes(bot))) return false;
+    if (EXCLUDED_BOTS.some(bot => nameLower.includes(bot))) return false;
     if (/\bbot\b/.test(nameLower)) return false;
     return true;
   });
