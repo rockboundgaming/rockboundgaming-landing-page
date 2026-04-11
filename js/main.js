@@ -194,14 +194,13 @@ async function loadFeaturedCreators() {
     }
 
     // Community live creators: level >= 5, featured, live, excluding the main channel.
+    // Only use server-confirmed Twitch API status to avoid stale spreadsheet data
+    // causing a name flicker on load.
     const communityLiveNow = creators.filter(c =>
       c.level >= 5 &&
       c.featured?.toLowerCase() === "yes" &&
       c.twitch !== ROCKBOUND_CHANNEL &&
-      (
-        serverLiveUsernames.has(c.twitch) ||
-        c.status === "live" || c.status === "active"
-      )
+      serverLiveUsernames.has(c.twitch)
     );
 
     // Build unified live list: Rockbound first (if live), then community (up to 4 total).
@@ -413,6 +412,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initTwitchScript();
   await loadFeaturedCreators();
   fetchDiscordMembers();
+  loadPlayerOfTheMonth();
 });
 
 setInterval(loadFeaturedCreators, 60000);
@@ -494,11 +494,15 @@ function renderDiscordMembers(members, count) {
 
   // Filter out bots: explicit bot flag, known bot usernames, or "bot" in name.
   const KNOWN_BOTS = ['carl-bot', 'mee6', 'dyno', 'groovy', 'rhythm', 'rythm', 'fredboat', 'nightbot', 'streamelements', 'streamlabs'];
+  // Server-specific bots/apps to hide from the Online Now list.
+  const EXCLUDED_BOTS = ['appy', 'arcane', 'jackie'];
   const humanMembers = members.filter(m => {
     if (m.bot === true) return false;
     const nameLower = m.username.toLowerCase();
     if (KNOWN_BOTS.includes(nameLower)) return false;
     if (/\bbot\b/.test(nameLower)) return false;
+    if (EXCLUDED_BOTS.some(b => nameLower.includes(b))) return false;
+    if (/\bmusic\b/.test(nameLower)) return false;
     return true;
   });
 
@@ -546,4 +550,26 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+// ============================================
+//   PLAYER OF THE MONTH
+// ============================================
+function loadPlayerOfTheMonth() {
+  fetch('potm.json')
+    .then(response => response.json())
+    .then(data => {
+      const nameEl  = document.getElementById('potm-name');
+      const titleEl = document.getElementById('potm-title');
+      const avatarEl = document.getElementById('potm-avatar');
+      const clipEl  = document.getElementById('potm-clip');
+      const bioEl   = document.getElementById('potm-bio');
+
+      if (nameEl)   nameEl.innerText  = data.winnerName;
+      if (titleEl)  titleEl.innerText = data.winnerTitle;
+      if (avatarEl) avatarEl.src      = data.avatarUrl;
+      if (clipEl)   clipEl.src        = data.clipEmbedUrl;
+      if (bioEl)    bioEl.innerText   = data.bio;
+    })
+    .catch(err => console.warn('Failed to load POTM data:', err));
 }
