@@ -691,24 +691,45 @@ function showFormStatus(el, type, message) {
 }
 
 // ============================================
-//   APPLY TO BE A CREATOR — TOGGLE
+//   APPLY TO BE A CREATOR — MODAL
 // ============================================
 function initApplyButton() {
-  const formContainer = document.querySelector('.creator-application');
-  if (!formContainer) return;
+  const modal = document.getElementById('creator-modal');
+  const closeBtn = document.getElementById('creator-modal-close');
+  if (!modal) return;
 
-  document.querySelectorAll('.apply-creator-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  // Only the button in the live-cta section below the stream grid opens the modal.
+  const liveCtaBtn = document.querySelector('.live-cta .apply-creator-btn');
+  if (liveCtaBtn) {
+    liveCtaBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      const isOpen = formContainer.classList.contains('open');
-      if (isOpen) {
-        formContainer.classList.remove('open');
-      } else {
-        formContainer.classList.add('open');
-        setTimeout(() => {
-          formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 50);
-      }
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      modal.querySelector('.creator-modal-close')?.focus();
     });
+  }
+
+  // Close on X button click.
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    });
+  }
+
+  // Close on overlay (backdrop) click.
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Close on Escape key.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    }
   });
 }
