@@ -313,8 +313,8 @@ function addStreamer(c, serverConfirmedLive = false) {
   container.appendChild(wrapper);
 
   const hostname = window.location.hostname === "" ? "localhost" : window.location.hostname;
-  const parentDomains = ['rockboundgaming.ca'];
-  if (hostname !== 'rockboundgaming.ca') parentDomains.push(hostname);
+  const parentDomains = ['rockboundgaming.ca', 'www.rockboundgaming.ca'];
+  if (hostname !== 'rockboundgaming.ca' && hostname !== 'www.rockboundgaming.ca') parentDomains.push(hostname);
 
   try {
     if (!window.Twitch || !window.Twitch.Player) {
@@ -467,8 +467,8 @@ function initOfflinePlayer() {
   // Embed the actual Twitch channel so the native offline page is displayed
   // when no one is streaming, and the stream appears automatically when live.
   const hostname = window.location.hostname || 'localhost';
-  const parentDomains = ['rockboundgaming.ca'];
-  if (hostname !== 'rockboundgaming.ca') parentDomains.push(hostname);
+  const parentDomains = ['rockboundgaming.ca', 'www.rockboundgaming.ca'];
+  if (hostname !== 'rockboundgaming.ca' && hostname !== 'www.rockboundgaming.ca') parentDomains.push(hostname);
   const parentParams = parentDomains.map(d => `parent=${encodeURIComponent(d)}`).join('&');
   container.innerHTML = `<iframe
     src="https://player.twitch.tv/?channel=${ROCKBOUND_CHANNEL}&${parentParams}&autoplay=false&muted=true"
