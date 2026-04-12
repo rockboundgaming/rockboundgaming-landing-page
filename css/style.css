@@ -141,7 +141,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  align-items: center;        /* ← CENTER all direct children horizontally */
+  align-items: center;
   padding: 90px 0 0;
   box-sizing: border-box;
   position: relative;
@@ -149,7 +149,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   overflow: hidden;
   background: var(--darker);
 }
-
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -160,7 +159,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   animation: parallax 6s ease-in-out infinite;
   z-index: 0;
 }
-
 .hero-grid {
   position: absolute;
   inset: 0;
@@ -170,23 +168,21 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   background-size: 60px 60px;
   z-index: 1;
 }
-
 .hero-content {
   position: relative;
   z-index: 2;
   max-width: 1000px;
   width: 100%;
-  margin-left: auto;         /* ← CENTER in flex column */
-  margin-right: auto;        /* ← CENTER in flex column */
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;       /* ← CENTER logo, tagline, buttons */
+  align-items: center;
   justify-content: center;
   flex: 1 0 auto;
   padding-top: 10px;
   box-sizing: border-box;
 }
-
 .hero-logo {
   display: block;
   margin-left: auto;
@@ -200,7 +196,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
     drop-shadow(0 0 10px rgba(230,57,70,0.88))
     drop-shadow(0 0 22px rgba(230,57,70,0.18));
 }
-
 .hero-tagline-text {
   font-family: 'Bebas Neue', sans-serif;
   font-size: clamp(2.5rem, 6vw, 6rem);
@@ -213,7 +208,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-
 .hero-btns {
   display: flex;
   gap: 1rem;
@@ -222,7 +216,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   margin-bottom: 2rem;
   animation: fadeUp 1s ease forwards 0.2s both;
 }
-
 .authority-line {
   font-size: 1.4rem;
   letter-spacing: 2px;
@@ -237,7 +230,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   z-index: 2;
   text-align: center;
 }
-
 .hero-stats {
   margin-top: auto;
   background: var(--red);
@@ -255,7 +247,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   box-shadow: inset 0 10px 30px rgba(0,0,0,0.3);
   z-index: 3;
 }
-
 .stat-item {
   text-align: center;
   color: white;
@@ -263,10 +254,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   min-width: 100px;
   transition: all 0.3s ease;
 }
-.stat-item:hover {
-  transform: scale(1.1);
-}
-
+.stat-item:hover { transform: scale(1.1); }
 .stat-number {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 2rem;
@@ -275,7 +263,6 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   color: white;
   font-weight: 700;
 }
-
 .stat-label {
   font-size: 0.65rem;
   letter-spacing: 2px;
