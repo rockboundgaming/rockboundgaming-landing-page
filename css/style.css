@@ -138,11 +138,12 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
    HERO
    ============================================ */
 .hero {
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8.75rem 2rem 0;
+  padding: 2rem 0;
+  box-sizing: border-box;
   position: relative;
   text-align: center;
   overflow: hidden;
