@@ -233,9 +233,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
 .hero-stats {
   margin-top: auto;
   background: var(--red);
-  width: 100vw;
-  max-width: 100vw;
-  left: 0;
+  width: 100%; /* Changed from 100vw to 100% to prevent horizontal scroll */
   padding: 1.5rem 2rem;
   display: flex;
   justify-content: center;
@@ -243,9 +241,10 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   gap: 3rem;
   flex-wrap: wrap;
   position: relative;
-  animation: fadeUp 1s ease forwards 0.4s both;
-  box-shadow: inset 0 10px 30px rgba(0,0,0,0.3);
   z-index: 3;
+  box-shadow: inset 0 10px 30px rgba(0,0,0,0.3);
+  animation: fadeUp 1s ease forwards 0.4s both;
+  left: 0;
 }
 .stat-item {
   text-align: center;
@@ -2021,31 +2020,40 @@ footer {
   }
 }
 /* ============================================
-   DESKTOP HERO FIX — Center logo visually
+   DESKTOP HERO FIX — Center logo & Stats Bar
    ============================================ */
 @media (min-width: 1024px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes content to top/stats to bottom */
+    align-items: center;
+    width: 100%;
+    min-height: 100vh; /* Ensures it fills the desktop screen */
+  }
 
   .hero-content {
-    margin-left: auto;
-    margin-right: auto;
+    flex: 1; /* Makes this area grow to fill space above the stats */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically centers logo/text in that space */
     align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
     text-align: center;
   }
 
-  .hero-grid {
-    background-position: center center;
-  }
-
-  .hero-bg {
-    background:
-      radial-gradient(circle at 50% 45%, rgba(230,57,70,0.15), transparent 60%),
-      radial-gradient(circle at 50% 20%, rgba(69,123,157,0.2), transparent 50%),
-      var(--darker);
-  }
-
   .hero-logo {
-    filter:
-      drop-shadow(0 0 4px rgba(230,57,70,0.6))
-      drop-shadow(0 0 12px rgba(230,57,70,0.4));
+    max-width: 550px; /* Slight size reduction for better visual balance */
+    margin: 0 auto 1.5rem auto;
+  }
+
+  .hero-stats {
+    width: 100%;
+    margin-top: 0; /* Let flex-direction: column handle the gap */
+    padding: 2rem 0;
+    justify-content: center;
+    gap: 5rem; /* Wider gaps for desktop screens */
   }
 }
