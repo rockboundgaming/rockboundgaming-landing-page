@@ -2050,7 +2050,8 @@ footer {
     justify-content: center; /* Vertically center the content block */
     align-items: center;
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
+    height: 100svh; /* Constrain to viewport height so stats bar stays in view */
   }
 
   .hero-content {
@@ -2064,6 +2065,8 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     text-align: center;
+    padding-top: 0;    /* Override base asymmetric padding for correct centering */
+    padding-bottom: 0;
   }
 
   .hero-logo {
@@ -2092,10 +2095,10 @@ footer {
 
 /* ============================================
    DESKTOP MEDIUM-HEIGHT VIEWPORT
-   Covers 110–140% browser zoom on 1080p screens,
+   Covers 90–140% browser zoom on 1080p screens,
    and typical laptop viewports with browser chrome.
    ============================================ */
-@media (min-width: 1024px) and (max-height: 1050px) {
+@media (min-width: 1024px) and (max-height: 1150px) {
   .hero-logo {
     max-height: 28vh;
     width: auto;
