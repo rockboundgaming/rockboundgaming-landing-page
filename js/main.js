@@ -638,17 +638,17 @@ function initCaptcha() {
 
     try {
       const payload = {
-        content: 'New Application Received!',
+        content: '🚀 **New Creator Application Received!**',
         embeds: [{
           title: '🎮 New Creator Network Application',
           color: 0xe63946,
           fields: [
-            { name: 'Name',          value: escapeHtml(name),     inline: true },
-            { name: 'Gamertag',      value: escapeHtml(gamertag), inline: true },
-            { name: 'Platform',      value: escapeHtml(platform), inline: true },
-            { name: 'Primary Games', value: escapeHtml(games),    inline: false }
+            { name: 'Name',          value: name,     inline: true },
+            { name: 'Gamertag',      value: gamertag, inline: true },
+            { name: 'Platform',      value: platform, inline: true },
+            { name: 'Primary Games', value: games,    inline: false }
           ],
-          footer: { text: 'Rockbound Gaming — Creator Network' },
+          footer: { text: 'Redirecting to Discord...' },
           timestamp: new Date().toISOString()
         }]
       };
@@ -660,19 +660,17 @@ function initCaptcha() {
       });
 
       if (res.ok || res.status === 204) {
-        // Replace form with the success screen
-        form.style.display = 'none';
-        const successScreen = document.getElementById('creator-apply-success');
-        if (successScreen) successScreen.hidden = false;
+        alert('Application Sent! You must now join our Discord to complete the process.');
+        window.location.href = 'https://discord.gg/rockbound';
       } else {
         throw new Error(`HTTP ${res.status}`);
       }
     } catch (err) {
       console.error('Creator form error:', err);
-      showFormStatus(statusEl, 'error', 'Submission failed. Please join our Discord to apply directly.');
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit Application';
+      showFormStatus(statusEl, 'error', 'Submission failed. Taking you to Discord to apply manually...');
+      setTimeout(() => {
+        window.location.href = 'https://discord.gg/rockbound';
+      }, 2000);
     }
   });
 }());

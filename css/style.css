@@ -827,6 +827,7 @@ section:nth-child(odd) {
 #live {
   padding: 3rem 2rem;
   max-width: 1200px;
+  margin: 0 auto;       /* Centers the hub on wide screens */
 }
 
 /* Glow pulse animation for live state */
@@ -849,6 +850,7 @@ section:nth-child(odd) {
 .twitch-panel {
   flex: 1 1 0;
   min-width: 300px;
+  min-height: 300px;    /* Ensures the container has room for the player to init on mobile */
   background: #000;
   border-radius: 8px;
   overflow: hidden;
@@ -856,10 +858,21 @@ section:nth-child(odd) {
   display: flex !important;
   flex-direction: column;
   height: auto !important;
-  min-height: 0 !important;
   max-height: fit-content !important;
   align-self: flex-start;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Ensure the embed iframe fills the panel properly */
+.twitch-panel iframe {
+  width: 100% !important;
+  height: 450px !important;
+}
+
+@media (max-width: 768px) {
+  .twitch-panel iframe {
+    height: 250px !important;
+  }
 }
 
 .twitch-panel.is-live {
