@@ -227,8 +227,8 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   color: var(--silver-light);
   font-weight: 700;
   font-family: 'Barlow Condensed', sans-serif;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 0;
   animation: fadeUp 1s ease forwards 0.3s both;
   position: relative;
   z-index: 2;
@@ -1971,7 +1971,6 @@ footer {
   .authority-line {
     font-size: 0.9rem;
     padding: 0.4rem 0.8rem;
-    margin-top: 0.3rem;
   }
 
   .hero-stats {
@@ -2077,7 +2076,6 @@ footer {
   }
 
   .authority-line {
-    margin-top: 1.5rem;
     font-size: 1.4rem;
   }
 
