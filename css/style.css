@@ -141,7 +141,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  padding: 80px 0 0;
+  padding: 90px 0 0;
   box-sizing: border-box;
   position: relative;
   text-align: center;
