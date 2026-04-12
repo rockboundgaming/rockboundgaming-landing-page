@@ -252,8 +252,19 @@ function setHubStream(channelName, displayName) {
     }
   }
 
-  // No channel change — nothing more to do.
-  if (channelName === hubCurrentChannel) return;
+  // No channel change — but verify the player's internal state hasn't drifted.
+  if (channelName === hubCurrentChannel) {
+    if (hubPlayer) {
+      try {
+        const actual = hubPlayer.getChannel();
+        if (actual && actual.toLowerCase() !== channelName.toLowerCase()) {
+          console.log(`Forcing embed swap: ${actual} -> ${channelName}`);
+          hubPlayer.setChannel(channelName);
+        }
+      } catch (e) { /* getChannel() not available on all player versions */ }
+    }
+    return;
+  }
   hubCurrentChannel = channelName;
 
   if (!container) return;

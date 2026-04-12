@@ -142,7 +142,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 0;
+  padding: 2rem 0 5vh;
   box-sizing: border-box;
   position: relative;
   text-align: center;
