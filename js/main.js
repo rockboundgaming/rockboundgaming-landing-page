@@ -452,9 +452,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   initApplyButton();
 });
 
-// Re-check every 3 minutes: preempts any active Level-5 stream back to rockbound
+// Re-check every 1 minute: preempts any active Level-5 stream back to rockbound
 // the moment the main channel goes live, and handles streamers going offline.
-setInterval(loadFeaturedCreators, 3 * 60 * 1000);
+setInterval(loadFeaturedCreators, 1 * 60 * 1000);
 // Refresh Discord member list every 3 minutes
 setInterval(fetchDiscordMembers, 3 * 60 * 1000);
 
@@ -557,7 +557,7 @@ function escapeHtml(str) {
 // ============================================
 // Paste your Discord webhook URL here to receive applications in your staff channel.
 // NOTE: This URL will be visible in the page source; rotate it if misused.
-const CREATOR_APPLICATION_WEBHOOK = "https://discord.com/api/webhooks/1492596778506129551/AM8cV7H_4qovDtYFRHd0Mcuw-T8tXpPSACrDaKQEf1IlJv6436zfp8Lp44V9qa4Yrdrq";
+const CREATOR_APPLICATION_WEBHOOK = "https://discord.com/api/webhooks/1493294376082735185/8HBvNdge7aGej7rsfSsTfnK5kOh1YLCX7eNVE3NGfSpjhzdtklqARqdIhSxjj5UYBcK4";
 
 // Stores the expected CAPTCHA answer for the current challenge.
 let _captchaAnswer = 0;
@@ -665,6 +665,12 @@ function initApplyButton() {
   const closeBtn = document.getElementById('creator-modal-close');
   if (!modal) return;
 
+  function openModal() {
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    initCaptcha();
+  }
+
   function closeModal() {
     modal.hidden = true;
     document.body.style.overflow = '';
@@ -677,7 +683,12 @@ function initApplyButton() {
     if (statusEl) statusEl.hidden = true;
   }
 
-  // NOTE: The live-cta apply button links directly to Discord — no modal intercept needed.
+  // "Apply To Be A Creator" button in the live section opens the modal.
+  const liveCtaBtn = document.getElementById('live-cta-apply-btn');
+  if (liveCtaBtn) {
+    liveCtaBtn.addEventListener('click', openModal);
+  }
+
   // Close on X button click.
   if (closeBtn) {
     closeBtn.addEventListener('click', closeModal);
