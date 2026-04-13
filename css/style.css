@@ -1761,6 +1761,11 @@ footer {
     flex: 0 0 auto;
   }
 
+  .stat-item:nth-child(4),
+  .stat-item:nth-child(5) {
+    display: none;
+  }
+
   .stat-number {
     font-size: 1.5rem;
   }
@@ -2021,6 +2026,11 @@ footer {
 
   .stat-item {
     min-width: 60px;
+  }
+
+  .stat-item:nth-child(4),
+  .stat-item:nth-child(5) {
+    display: none;
   }
 
   .stat-number {
