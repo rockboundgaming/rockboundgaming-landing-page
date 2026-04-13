@@ -452,7 +452,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initApplyButton();
 });
 
-// Re-check every 3 minutes: preempts any active Level-5 stream back to rockbound
+// Re-check every 1 minute: preempts any active Level-5 stream back to rockbound
 // the moment the main channel goes live, and handles streamers going offline.
 setInterval(loadFeaturedCreators, 1 * 60 * 1000);
 // Refresh Discord member list every 3 minutes
