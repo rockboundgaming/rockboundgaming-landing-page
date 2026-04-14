@@ -1940,7 +1940,7 @@ footer {
     font-size: 0.9rem;
   }
 
-  section {
+  .section-inner {
     padding: 3rem 1.5rem;
   }
 
@@ -2195,7 +2195,7 @@ footer {
     font-size: 0.8rem;
   }
 
-  section {
+  .section-inner {
     padding: 2rem 1rem;
   }
 
