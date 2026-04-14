@@ -1,0 +1,21 @@
+{
+  "published": false,
+  "month": "April 2026",
+  "name": "PlayerName",
+  "gamertag": "@gamertag",
+  "avatar": "./assets/potm/avatar.png",
+  "platform": "PC",
+  "primaryGame": "Warzone",
+  "quote": "A short quote from the player.",
+  "stats": [
+    { "label": "Hours Streamed", "value": "42" },
+    { "label": "Followers Gained", "value": "120" },
+    { "label": "Clips Shared", "value": "18" }
+  ],
+  "socials": {
+    "twitch": "",
+    "tiktok": "",
+    "youtube": "",
+    "discord": ""
+  }
+}

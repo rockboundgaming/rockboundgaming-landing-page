@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<link rel="icon" href="/assets/logos/tplogo.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/logos/tplogo.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#e63946">
+
+<title>Player of the Month | Rockbound Gaming</title>
+<meta name="description" content="Rockbound Gaming's Player of the Month — a monthly spotlight on a standout member of our community.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.rockboundgaming.ca/player-of-the-month.html">
+<meta property="og:site_name" content="Rockbound Gaming">
+<meta property="og:title" content="Player of the Month | Rockbound Gaming">
+<meta property="og:description" content="Every month we spotlight a standout member of the Rockbound Gaming community.">
+<meta property="og:image" content="https://www.rockboundgaming.ca/assets/logos/tplogo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" as="style">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
+
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="stylesheet" href="/css/style.min.css?v=240">
+<link rel="stylesheet" href="/css/potm.css">
+</head>
+
+<body class="potm-page">
+
+<!-- NAV -->
+<nav class="potm-nav">
+  <a href="/" class="potm-nav-logo">ROCKBOUND<span>GAMING</span></a>
+</nav>
+
+<!-- MAIN -->
+<main class="potm-main" id="potm-main">
+  <!-- Content is injected here by JavaScript -->
+</main>
+
+<!-- FOOTER -->
+<footer class="potm-footer">
+  <div class="potm-footer-logo">ROCKBOUND<span>GAMING</span></div>
+  <div class="potm-footer-tagline">Built on the Rock. Gaming Everywhere.</div>
+  <div class="potm-footer-copy">© 2026 Rockbound Gaming</div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var SOCIALS_CONFIG = [
+    { key: 'twitch',  icon: 'fab fa-twitch',   label: 'Twitch',   base: 'https://www.twitch.tv/' },
+    { key: 'tiktok',  icon: 'fab fa-tiktok',   label: 'TikTok',   base: 'https://www.tiktok.com/' },
+    { key: 'youtube', icon: 'fab fa-youtube',  label: 'YouTube',  base: 'https://www.youtube.com/' },
+    { key: 'discord', icon: 'fab fa-discord',  label: 'Discord',  base: 'https://discord.gg/' }
+  ];
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderComingSoon() {
+    document.getElementById('potm-main').innerHTML =
+      '<div class="potm-coming-soon">' +
+        '<div class="potm-coming-soon-inner">' +
+          '<div class="potm-coming-soon-icon"><i class="fas fa-trophy" aria-hidden="true"></i></div>' +
+          '<div class="potm-coming-soon-label">Player of the Month</div>' +
+          '<h1 class="potm-coming-soon-title">COMING<br><span>SOON</span></h1>' +
+          '<p class="potm-coming-soon-sub">The next Rockbound Gaming Player of the Month will be revealed shortly. Check back soon!</p>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function renderPage(data) {
+    var main = document.getElementById('potm-main');
+
+    // Build stats HTML
+    var statsHtml = '';
+    if (Array.isArray(data.stats)) {
+      data.stats.forEach(function (s) {
+        statsHtml +=
+          '<div class="potm-stat-item">' +
+            '<div class="potm-stat-number">' + esc(s.value) + '</div>' +
+            '<div class="potm-stat-label">' + esc(s.label) + '</div>' +
+          '</div>';
+      });
+    }
+
+    // Build socials HTML (only show non-empty entries)
+    var socialsHtml = '';
+    if (data.socials && typeof data.socials === 'object') {
+      SOCIALS_CONFIG.forEach(function (cfg) {
+        var handle = data.socials[cfg.key];
+        if (handle && handle.trim() !== '') {
+          var href = handle.startsWith('http') ? esc(handle) : esc(cfg.base + handle.trim());
+          socialsHtml +=
+            '<a href="' + href + '" target="_blank" rel="noopener noreferrer" class="potm-social-link">' +
+              '<i class="' + cfg.icon + '" aria-hidden="true"></i>' +
+              cfg.label +
+            '</a>';
+        }
+      });
+    }
+
+    // Platform & game badges
+    var badgesHtml = '';
+    if (data.platform) {
+      badgesHtml += '<span class="potm-badge"><i class="fas fa-desktop" aria-hidden="true"></i>' + esc(data.platform) + '</span>';
+    }
+    if (data.primaryGame) {
+      badgesHtml += '<span class="potm-badge"><i class="fas fa-gamepad" aria-hidden="true"></i>' + esc(data.primaryGame) + '</span>';
+    }
+
+    // Update page title
+    document.title = 'Player of the Month: ' + esc(data.name) + ' | Rockbound Gaming';
+
+    main.innerHTML =
+      // Hero
+      '<section class="potm-hero">' +
+        '<div class="potm-hero-inner">' +
+          '<div class="potm-hero-month">' + esc(data.month) + '</div>' +
+          '<h1 class="potm-hero-heading">PLAYER OF THE <span>MONTH</span></h1>' +
+          '<div class="potm-avatar-wrap">' +
+            '<img src="' + esc(data.avatar) + '" alt="' + esc(data.name) + ' avatar" class="potm-avatar" width="150" height="150" onerror="this.style.display=\'none\'">' +
+          '</div>' +
+          '<div class="potm-info">' +
+            '<div class="potm-name">' + esc(data.name) + '</div>' +
+            '<div class="potm-gamertag">' + esc(data.gamertag) + '</div>' +
+            (badgesHtml ? '<div class="potm-badges">' + badgesHtml + '</div>' : '') +
+          '</div>' +
+        '</div>' +
+      '</section>' +
+      // Content
+      '<div class="potm-content">' +
+        // Quote
+        (data.quote
+          ? '<div class="potm-quote-wrap"><blockquote class="potm-quote">' + esc(data.quote) + '</blockquote></div>'
+          : '') +
+        // Stats
+        (statsHtml
+          ? '<div class="potm-stats-section">' +
+              '<div class="potm-section-label">This Month\'s Highlights</div>' +
+              '<div class="potm-stats">' + statsHtml + '</div>' +
+            '</div>'
+          : '') +
+        // Socials
+        (socialsHtml
+          ? '<div class="potm-socials-section">' +
+              '<div class="potm-section-label">Find Them Online</div>' +
+              '<div class="potm-socials">' + socialsHtml + '</div>' +
+            '</div>'
+          : '') +
+        // Back button
+        '<div class="potm-back-wrap">' +
+          '<a href="/" class="btn-primary">' +
+            '<i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Home' +
+          '</a>' +
+        '</div>' +
+      '</div>';
+  }
+
+  fetch('./potm-data.json')
+    .then(function (res) {
+      if (!res.ok) { throw new Error('HTTP ' + res.status); }
+      return res.json();
+    })
+    .then(function (data) {
+      if (data.published === true) {
+        renderPage(data);
+      } else {
+        renderComingSoon();
+      }
+    })
+    .catch(function () {
+      renderComingSoon();
+    });
+}());
+</script>
+</body>
+</html>
