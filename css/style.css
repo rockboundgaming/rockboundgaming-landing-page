@@ -976,7 +976,7 @@ section::after {
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
-  align-items: flex-start;
+  align-items: stretch;
   margin-bottom: 2rem;
   width: 100%;
 }
@@ -986,15 +986,12 @@ section::after {
   flex: 1 1 0;
   min-width: 300px;
   min-height: 300px;    /* Ensures the container has room for the player to init on mobile */
-  align-self: flex-start;
   background: #000;
   border-radius: 8px;
   overflow: hidden;
   border: 2px solid #ff4b4b;
   display: flex !important;
   flex-direction: column;
-  height: auto !important;
-  max-height: fit-content !important;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -1235,7 +1232,7 @@ section::after {
 .discord-panel {
   flex: 0 0 280px;
   min-width: 0;
-  max-height: 500px;
+  max-height: none;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
