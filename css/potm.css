@@ -1,0 +1,465 @@
+/* ============================================
+   PLAYER OF THE MONTH — potm.css
+   Complements style.min.css — no overrides
+   ============================================ */
+
+/* ── PAGE BODY ── */
+.potm-page {
+  background: var(--darker);
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── NAV ── */
+.potm-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  background: rgba(6, 8, 16, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid rgba(230, 57, 70, 0.3);
+}
+
+.potm-nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: var(--white);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.potm-nav-logo:hover { opacity: 0.85; }
+.potm-nav-logo span { color: var(--red); }
+
+/* ── MAIN CONTENT AREA ── */
+.potm-main {
+  flex: 1;
+}
+
+/* ── COMING SOON ── */
+.potm-coming-soon {
+  min-height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.potm-coming-soon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(230, 57, 70, 0.07) 0%, transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(230, 57, 70, 0.05) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      rgba(230, 57, 70, 0.05) 40px
+    );
+  pointer-events: none;
+}
+
+.potm-coming-soon-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+}
+
+.potm-coming-soon-icon {
+  font-size: 4rem;
+  color: var(--red);
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+}
+
+.potm-coming-soon-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.potm-coming-soon-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 10vw, 6rem);
+  letter-spacing: 0.05em;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 1.25rem;
+}
+
+.potm-coming-soon-title span {
+  color: var(--red);
+}
+
+.potm-coming-soon-sub {
+  font-family: 'Barlow', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+}
+
+/* ── HERO BANNER ── */
+.potm-hero {
+  position: relative;
+  width: 100%;
+  padding: 5rem 2rem 4rem;
+  text-align: center;
+  overflow: hidden;
+  background: var(--darker);
+}
+
+.potm-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(230, 57, 70, 0.12) 0%, transparent 70%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(230, 57, 70, 0.04) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      rgba(230, 57, 70, 0.04) 40px
+    );
+  pointer-events: none;
+}
+
+.potm-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.potm-hero-month {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.potm-hero-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  margin-bottom: 2.5rem;
+  color: var(--white);
+}
+
+.potm-hero-heading span {
+  color: var(--red);
+}
+
+/* ── AVATAR ── */
+.potm-avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.potm-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--red);
+  box-shadow: 0 0 18px rgba(230, 57, 70, 0.6), 0 0 50px rgba(230, 57, 70, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--card);
+}
+
+.potm-avatar:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 30px rgba(230, 57, 70, 0.85), 0 0 70px rgba(230, 57, 70, 0.3);
+}
+
+/* ── PLAYER INFO ── */
+.potm-info {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.potm-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  letter-spacing: 0.06em;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.potm-gamertag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  margin-bottom: 0.75rem;
+}
+
+.potm-badges {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.potm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(230, 57, 70, 0.12);
+  border: 1px solid rgba(230, 57, 70, 0.35);
+  border-radius: 4px;
+  padding: 0.3rem 0.75rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.potm-badge i {
+  color: var(--red);
+  font-size: 0.75rem;
+}
+
+/* ── CONTENT AREA ── */
+.potm-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* ── QUOTE ── */
+.potm-quote-wrap {
+  text-align: center;
+  position: relative;
+  padding: 1.5rem 2rem;
+}
+
+.potm-quote-wrap::before {
+  content: '\201C';
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 8rem;
+  color: var(--red);
+  opacity: 0.18;
+  position: absolute;
+  top: -1.5rem;
+  left: 1rem;
+  line-height: 1;
+}
+
+.potm-quote {
+  font-family: 'Barlow', sans-serif;
+  font-style: italic;
+  font-size: clamp(1.2rem, 3vw, 1.7rem);
+  color: var(--gold);
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+.potm-quote::after {
+  content: '\201D';
+  font-style: normal;
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--red);
+  opacity: 0.5;
+}
+
+/* ── STATS ── */
+.potm-stats-section {
+  text-align: center;
+}
+
+.potm-section-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.potm-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.potm-stat-item {
+  background: var(--card);
+  border: 1px solid rgba(230, 57, 70, 0.2);
+  border-radius: 6px;
+  padding: 1.25rem 2rem;
+  min-width: 130px;
+  flex: 1 1 130px;
+  max-width: 200px;
+  text-align: center;
+  transition: border-color 0.3s, transform 0.2s;
+}
+
+.potm-stat-item:hover {
+  border-color: rgba(230, 57, 70, 0.5);
+  transform: translateY(-3px);
+}
+
+.potm-stat-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  letter-spacing: 0.05em;
+  color: var(--red);
+  line-height: 1;
+}
+
+.potm-stat-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.3rem;
+}
+
+/* ── SOCIALS ── */
+.potm-socials-section {
+  text-align: center;
+}
+
+.potm-socials {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.potm-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--red);
+  text-decoration: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(230, 57, 70, 0.3);
+  border-radius: 4px;
+  transition: color 0.3s, border-color 0.3s, transform 0.2s;
+}
+
+.potm-social-link i {
+  font-size: 1.2rem;
+}
+
+.potm-social-link:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+/* ── BACK BUTTON ── */
+.potm-back-wrap {
+  text-align: center;
+}
+
+/* ── FOOTER ── */
+.potm-footer {
+  background: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(230, 57, 70, 0.2);
+  padding: 2.5rem 1rem;
+  text-align: center;
+}
+
+.potm-footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+
+.potm-footer-logo span { color: var(--red); }
+
+.potm-footer-tagline {
+  opacity: 0.55;
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.potm-footer-copy {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .potm-hero {
+    padding: 4rem 1.25rem 3rem;
+  }
+
+  .potm-content {
+    padding: 2rem 1.25rem 3rem;
+    gap: 2rem;
+  }
+
+  .potm-avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .potm-stat-item {
+    min-width: 100px;
+    padding: 1rem 1.25rem;
+  }
+
+  .potm-coming-soon {
+    padding: 3rem 1.25rem;
+  }
+
+  .potm-nav {
+    padding: 1rem 1.25rem;
+  }
+}
