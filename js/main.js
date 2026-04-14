@@ -235,6 +235,40 @@ async function loadFeaturedCreators() {
 //   SINGLE-STREAM HUB
 // ============================================
 
+/**
+ * Restores the custom branded offline card inside #offline-player.
+ * Called whenever nobody is live; avoids showing a Twitch loading spinner
+ * or Twitch's own generic offline screen.
+ */
+function showOfflineCard() {
+  const container = document.getElementById('offline-player');
+  const panel = document.getElementById('twitch-panel');
+  const titleEl = document.getElementById('panel-stream-title');
+
+  hubPlayer = null;
+  hubCurrentChannel = null;
+
+  if (titleEl) titleEl.textContent = 'Rockbound Gaming';
+  if (panel) panel.classList.remove('is-live');
+
+  if (!container) return;
+
+  container.style.display = 'flex';
+  container.innerHTML =
+    '<div class="offline-placeholder">' +
+      '<img src="/assets/logos/tplogo.png" alt="Rockbound Gaming" class="offline-logo">' +
+      '<div class="offline-text">' +
+        '<span class="offline-badge">OFFLINE</span>' +
+        '<p class="offline-handle">@rockboundgaming</p>' +
+        '<p>Built on the Rock. Gaming Everywhere.</p>' +
+      '</div>' +
+      '<a href="https://www.twitch.tv/rockboundgaming" target="_blank" rel="noopener noreferrer" class="btn-primary offline-cta">' +
+        '<i class="fab fa-twitch"></i>&nbsp; Follow on Twitch' +
+      '</a>' +
+    '</div>';
+  requestAnimationFrame(syncDiscordHeight);
+}
+
 // ============================================
 //   DISCORD / TWITCH HEIGHT SYNC
 // ============================================
@@ -282,10 +316,7 @@ function updateLiveDisplay(liveStreams) {
     }
     if (panel) panel.classList.remove('is-live');
     if (titleEl) titleEl.textContent = 'Rockbound Gaming';
-    // Use style.display so the CSS `display: flex` rule on #offline-player cannot
-    // override the hidden attribute (which it would, since author styles beat UA defaults).
-    if (offlineContainer) offlineContainer.style.display = 'flex';
-    setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
+    showOfflineCard();
     return;
   }
 
@@ -447,10 +478,10 @@ function setHubStream(channelName, displayName) {
       });
 
       // If a featured creator's stream ends while the user is watching,
-      // fall back to the main rockbound channel.
+      // fall back to the custom offline card.
       if (channelName !== ROCKBOUND_CHANNEL) {
         hubPlayer.addEventListener(Twitch.Player.OFFLINE, () => {
-          setHubStream(ROCKBOUND_CHANNEL, 'Rockbound Gaming');
+          showOfflineCard();
         });
       }
     }
@@ -464,16 +495,14 @@ function setHubStream(channelName, displayName) {
 //   INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
-  // 2-second fallback: if the hub player hasn't initialised yet, load the
-  // default channel so the loading spinner doesn't spin forever.
+  // 2-second fallback: ensure the offline card is shown if loadFeaturedCreators
+  // hasn't resolved yet and nothing else is already displaying.
   setTimeout(() => {
-    const offlineEl = document.getElementById('offline-player');
     const liveGrid = document.getElementById('live-streams-grid');
-    const loadingEl = document.getElementById('permanent-loading');
-    // Only trigger the offline fallback if the live grid is NOT already showing
+    // Only trigger if the live grid is NOT already showing
     const liveGridIsVisible = liveGrid && liveGrid.childElementCount > 0 && liveGrid.style.display !== 'none' && !liveGrid.hidden;
-    if (!liveGridIsVisible && loadingEl && offlineEl && loadingEl.style.display !== 'none') {
-      if (!hubCurrentChannel) updateLiveDisplay([]);
+    if (!liveGridIsVisible && !hubCurrentChannel) {
+      updateLiveDisplay([]);
     }
     const discordList = document.getElementById('discord-members-list');
     if (discordList && discordList.querySelector('.discord-loading-item')) {
