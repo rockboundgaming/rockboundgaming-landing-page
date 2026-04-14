@@ -3,13 +3,13 @@
 //   Enables offline support and fast repeat loads
 // ============================================
 
-const CACHE_VERSION = 'rbg-v4';
+const CACHE_VERSION = 'rbg-v5';
 
 // Static assets to pre-cache when the service worker installs.
 const PRECACHE_URLS = [
   '/',
   '/index.html',
-  '/css/style.min.css?v=242',
+  '/css/style.min.css?v=243',
   '/js/main.min.js?v=221',
   '/assets/logos/tplogo.png',
   '/assets/logos/favicon.jpg',
