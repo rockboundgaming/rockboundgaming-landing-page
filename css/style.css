@@ -421,6 +421,42 @@ section {
   background: var(--darker);
 }
 
+#about {
+  background:
+    radial-gradient(ellipse at 10% 80%, rgba(230,57,70,0.06) 0%, transparent 60%),
+    var(--darker);
+}
+
+#creators {
+  background:
+    radial-gradient(ellipse at 90% 10%, rgba(29,53,87,0.12) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(230,57,70,0.03) 0%, rgba(29,53,87,0.05) 100%);
+}
+
+#live {
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(230,57,70,0.08) 0%, transparent 65%),
+    var(--darker);
+}
+
+#roadmap {
+  background:
+    radial-gradient(ellipse at 80% 90%, rgba(29,53,87,0.1) 0%, transparent 55%),
+    var(--darker);
+}
+
+#community {
+  background:
+    radial-gradient(ellipse at 20% 60%, rgba(29,53,87,0.1) 0%, transparent 55%),
+    var(--darker);
+}
+
+#platforms {
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(230,57,70,0.05) 0%, transparent 55%),
+    var(--darker);
+}
+
 .section-inner {
   max-width: var(--container-max);
   margin: 0 auto;
@@ -455,6 +491,16 @@ section::after {
 
 .section-title span { color: var(--red); }
 
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--red);
+  margin-top: 0.75rem;
+  box-shadow: 0 0 12px rgba(230,57,70,0.7);
+}
+
 .section-tag {
   font-size: 1.1rem;
   letter-spacing: 3px;
@@ -462,6 +508,7 @@ section::after {
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   border-left: 3px solid var(--red);
+  box-shadow: -4px 0 10px rgba(230,57,70,0.5);
   padding-left: 0.8rem;
   display: inline-block;
   font-weight: 700;
@@ -498,8 +545,9 @@ section::after {
    ============================================ */
 .divider {
   width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(230,57,70,0.4), transparent);
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--red) 30%, var(--gold) 50%, var(--red) 70%, transparent 100%);
+  box-shadow: 0 0 12px rgba(230,57,70,0.6), 0 0 30px rgba(244,196,48,0.2);
 }
 
 /* ============================================
@@ -574,6 +622,22 @@ section::after {
   width: 3px;
   height: 100%;
   background: var(--red);
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover::after {
+  opacity: 1;
 }
 
 .card:hover {
