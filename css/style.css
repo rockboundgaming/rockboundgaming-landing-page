@@ -1092,6 +1092,34 @@ section::after {
   box-shadow: 0 8px 25px rgba(145,70,255,0.5), 0 0 20px rgba(145,70,255,0.6);
 }
 
+/* ---- Offline card mobile: shrink content to fit, card size unchanged ---- */
+@media (max-width: 600px) {
+  .offline-placeholder {
+    gap: 0.4rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .offline-logo {
+    width: 32vw;
+    max-width: 100px;
+  }
+
+  .offline-badge {
+    font-size: clamp(1.6rem, 7vw, 2.4rem);
+    letter-spacing: 3px;
+  }
+
+  .offline-text p {
+    font-size: 0.78rem;
+  }
+
+  .offline-cta {
+    font-size: 0.85rem;
+    padding: 0.55rem 1.1rem;
+    white-space: nowrap;
+  }
+}
+
 /* Live streams grid: up to 4 streams in a responsive grid */
 .stream-grid {
   display: none;
