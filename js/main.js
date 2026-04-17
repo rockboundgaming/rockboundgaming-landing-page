@@ -333,14 +333,14 @@ function updateLiveDisplay(liveStreams) {
       return `
         <div class="stream-wrapper">
           <div class="streamer-header">
-            <strong>${s.name || s.twitch}</strong>${levelText}<span class="live-badge" aria-label="Live"><span aria-hidden="true">&#x25CF;</span> LIVE</span>
+            <strong>${escapeHtml(s.name || s.twitch)}</strong>${escapeHtml(levelText)}<span class="live-badge" aria-label="Live"><span aria-hidden="true">&#x25CF;</span> LIVE</span>
           </div>
           <div class="video-aspect-ratio">
             <iframe
               src="${streamUrl}"
               allowfullscreen
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              title="${s.name || s.twitch} live stream">
+              title="${escapeHtml(s.name || s.twitch)} live stream">
             </iframe>
           </div>
         </div>`;
@@ -598,7 +598,7 @@ function renderDiscordMembers(members, count) {
   humanMembers.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
 
   list.innerHTML = humanMembers.map(m => {
-    const avatarSrc = m.avatar_url || '/assets/logos/favcon.jpg';
+    const avatarSrc = m.avatar_url || '/assets/logos/favicon.jpg';
     const game = m.game
       ? `<span class="member-game">${escapeHtml(m.game.name)}</span>`
       : '';
@@ -606,7 +606,7 @@ function renderDiscordMembers(members, count) {
       <li class="discord-member-item">
         <div class="member-avatar-wrap">
           <img src="${avatarSrc}" alt="${escapeHtml(m.username)}" class="member-avatar" loading="lazy"
-               onerror="this.src='/assets/logos/favcon.jpg'">
+               onerror="this.src='/assets/logos/favicon.jpg'">
           <span class="member-status-dot status-${m.status}" title="${m.status}"></span>
         </div>
         <div class="member-info">
