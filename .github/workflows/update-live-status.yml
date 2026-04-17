@@ -21,7 +21,7 @@ jobs:
           TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
         run: |
           if [ -z "${TWITCH_CLIENT_ID}" ] || [ -z "${TWITCH_CLIENT_SECRET}" ]; then
-            echo "Twitch credentials not configured — skipping update."
+            echo "Twitch credentials not configured - skipping update."
             echo '{"data":[]}' > /tmp/streams.json
             exit 0
           fi
