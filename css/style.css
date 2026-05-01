@@ -245,7 +245,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
 }
 .hero-tagline-text {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2rem, 4.5vw, 4.5rem);
+  font-size: clamp(1.6rem, 3.4vw, 3.25rem);
   letter-spacing: 2px;
   text-transform: uppercase;
   margin-bottom: 2rem;
