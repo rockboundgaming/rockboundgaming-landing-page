@@ -75,17 +75,6 @@ body::before {
   50%      { background-position: 100% 50%; }
 }
 
-@keyframes heroLogoBreathe {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 3px rgba(230,57,70,0.45));
-  }
-  50% {
-    transform: scale(1.02);
-    filter: drop-shadow(0 0 5px rgba(230,57,70,0.6));
-  }
-}
-
 @keyframes pulse {
   0%, 100% { opacity: 0.85; }
   50% { opacity: 1; }
@@ -263,9 +252,7 @@ nav.scrolled { box-shadow: 0 10px 30px rgba(230,57,70,0.2); }
   margin-bottom: 1rem;
   max-width: 600px;
   width: 100%;
-  animation:
-    fadeUp 1s ease forwards,
-    heroLogoBreathe 6s ease-in-out 1s infinite;
+  animation: fadeUp 1s ease forwards;
   filter: drop-shadow(0 0 3px rgba(230,57,70,0.45));
 }
 .hero-tagline-text {
