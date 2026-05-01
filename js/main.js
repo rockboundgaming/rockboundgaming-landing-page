@@ -92,6 +92,14 @@ let hubCurrentChannel = null;  // The channel name currently loaded in the hub p
 let hubPlayer = null;          // The active Twitch.Player instance
 let currentGridChannels = '';  // Comma-joined channel list of the last grid build
 
+// Channels that the Twitch.Player SDK has reported OFFLINE locally, even though
+// the server-side live-status.json still lists them as live (it lags by a few
+// minutes). We suppress these from the rendered live list until live-status.json
+// also drops them, at which point they're cleared so they can come back online.
+const localOfflineChannels = new Set();
+// Grid players keyed by channel name so we can tear them down on rebuild.
+const gridPlayers = new Map();
+
 // The primary channel that is permanently embedded (24/7).
 const ROCKBOUND_CHANNEL = "rockboundgaming";
 
@@ -174,16 +182,25 @@ async function loadFeaturedCreators() {
       if (s.twitch) activeLiveUsernames.add(s.twitch.toLowerCase());
     }
 
+    // Clear local-offline flags for channels the server no longer lists as live
+    // — once Twitch's API agrees they're offline, our local override has done
+    // its job and we should let them come back live in future polls.
+    for (const ch of [...localOfflineChannels]) {
+      if (!activeLiveUsernames.has(ch)) localOfflineChannels.delete(ch);
+    }
+
     // Collect all live featured creators (excluding rockboundgaming), sorted by level desc.
     const liveCreators = creators.filter(c =>
       c.featured?.toLowerCase() === "yes" &&
       c.level >= 5 &&
       c.twitch !== ROCKBOUND_CHANNEL &&
-      activeLiveUsernames.has(c.twitch)
+      activeLiveUsernames.has(c.twitch) &&
+      !localOfflineChannels.has(c.twitch)
     );
     liveCreators.sort((a, b) => b.level - a.level);
 
-    const rockboundIsLive = activeLiveUsernames.has(ROCKBOUND_CHANNEL);
+    const rockboundIsLive = activeLiveUsernames.has(ROCKBOUND_CHANNEL) &&
+      !localOfflineChannels.has(ROCKBOUND_CHANNEL);
 
     // If other creators are live, they replace the offline placeholder.
     // Only prepend rockboundgaming when it is confirmed live.
@@ -294,6 +311,16 @@ function updateLiveDisplay(liveStreams) {
   const panel = document.getElementById('twitch-panel');
   const titleEl = document.getElementById('panel-stream-title');
 
+  // When leaving grid mode (0 or 1 streams), destroy any grid players so they
+  // don't keep network connections open or fire stale OFFLINE events.
+  function teardownGridPlayers() {
+    if (!gridPlayers.size) return;
+    gridPlayers.forEach(p => {
+      try { if (p && p.destroy) p.destroy(); } catch (_) {}
+    });
+    gridPlayers.clear();
+  }
+
   if (!liveStreams || liveStreams.length === 0) {
     // Nobody live — show the single offline player for rockboundgaming.
     if (liveGrid) {
@@ -302,6 +329,7 @@ function updateLiveDisplay(liveStreams) {
       // than `.stream-grid { display: none }` and would override [hidden]).
       liveGrid.style.display = 'none';
       liveGrid.hidden = true;
+      teardownGridPlayers();
       liveGrid.innerHTML = '';
       currentGridChannels = '';
     }
@@ -323,6 +351,7 @@ function updateLiveDisplay(liveStreams) {
     if (liveGrid) {
       liveGrid.style.display = 'none';
       liveGrid.hidden = true;
+      teardownGridPlayers();
       liveGrid.innerHTML = '';
       currentGridChannels = '';
     }
@@ -371,27 +400,76 @@ function updateLiveDisplay(liveStreams) {
   if (hostname !== 'rockboundgaming.ca' && hostname !== 'www.rockboundgaming.ca') {
     parentDomains.push(hostname);
   }
-  const parentParam = parentDomains.map(d => `parent=${encodeURIComponent(d)}`).join('&');
 
-  function buildGrid() {
-    liveGrid.innerHTML = streams.map(s => {
+  // Called when an embedded grid stream signals it is OFFLINE. Mark the
+  // channel so subsequent live-status polls don't immediately resurrect it,
+  // then re-render the live display with the remaining streams. With one live
+  // stream left this collapses to setHubStream (which itself shows the custom
+  // offline card on OFFLINE); with none left it shows the offline card.
+  function handleGridOffline(channel) {
+    if (!channel) return;
+    const lower = channel.toLowerCase();
+    if (localOfflineChannels.has(lower)) return;
+    localOfflineChannels.add(lower);
+    const remaining = streams.filter(s => s.twitch.toLowerCase() !== lower);
+    updateLiveDisplay(remaining);
+  }
+
+  async function buildGrid() {
+    teardownGridPlayers();
+    liveGrid.innerHTML = streams.map((s, i) => {
       const levelText = s.level ? ` - Level ${s.level}` : '';
-      const streamUrl = `https://player.twitch.tv/?channel=${encodeURIComponent(s.twitch)}&${parentParam}&autoplay=true&muted=true`;
       return `
         <div class="stream-wrapper">
           <div class="streamer-header">
             <strong>${escapeHtml(s.name || s.twitch)}</strong>${escapeHtml(levelText)}<span class="live-badge" aria-label="LIVE"><span aria-hidden="true">&#x25CF;</span> LIVE</span>
           </div>
           <div class="video-aspect-ratio">
-            <iframe
-              src="${streamUrl}"
-              allowfullscreen
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              title="${escapeHtml(s.name || s.twitch)} live stream">
-            </iframe>
+            <div id="grid-player-${i}-${encodeURIComponent(s.twitch)}" class="grid-player-mount" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
           </div>
         </div>`;
     }).join('');
+
+    // Lazily load Twitch SDK so the grid embeds can fire OFFLINE events and
+    // we can fall back to the custom offline card when a streamer ends.
+    await initTwitchScript();
+    if (!window.Twitch || !window.Twitch.Player) {
+      console.warn('Twitch.Player not available — grid embeds will not detect offline.');
+      requestAnimationFrame(syncDiscordHeight);
+      return;
+    }
+
+    streams.forEach((s, i) => {
+      const mountId = `grid-player-${i}-${encodeURIComponent(s.twitch)}`;
+      const mount = document.getElementById(mountId);
+      if (!mount) return;
+      try {
+        const player = new Twitch.Player(mountId, {
+          channel: s.twitch,
+          width: '100%',
+          height: '100%',
+          parent: parentDomains,
+          autoplay: true,
+          muted: true
+        });
+        gridPlayers.set(s.twitch.toLowerCase(), player);
+        // Apply the same permissions policy the raw iframe used so autoplay
+        // and fullscreen are not silently blocked by modern browsers.
+        setTimeout(() => {
+          const iframe = mount.querySelector('iframe');
+          if (iframe) {
+            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+            iframe.setAttribute('title', `${s.name || s.twitch} live stream`);
+          }
+        }, 800);
+        if (player.addEventListener) {
+          player.addEventListener(Twitch.Player.OFFLINE, () => handleGridOffline(s.twitch));
+        }
+      } catch (e) {
+        console.error('Grid player init error for', s.twitch, e);
+      }
+    });
+
     requestAnimationFrame(syncDiscordHeight);
   }
 
@@ -520,8 +598,11 @@ async function setHubStream(channelName, displayName) {
       // If the stream ends or was never actually live (stale live-status.json),
       // fall back to the custom offline card. This covers both rockboundgaming
       // and featured creators, preventing the Twitch "double player" offline
-      // screen with VOD suggestions.
+      // screen with VOD suggestions. Mark the channel locally so the next
+      // live-status poll doesn't re-init the same offline channel until the
+      // server confirms it's offline too.
       hubPlayer.addEventListener(Twitch.Player.OFFLINE, () => {
+        if (channelName) localOfflineChannels.add(channelName.toLowerCase());
         showOfflineCard();
       });
     }
