@@ -452,15 +452,18 @@ async function setHubStream(channelName, displayName) {
   if (hostname !== 'rockboundgaming.ca' && hostname !== 'www.rockboundgaming.ca') parentDomains.push(hostname);
 
   // Create a uniquely-IDed mount point so Twitch.Player never confuses it
-  // with a stale element from the previous session.  The div must have
-  // non-zero dimensions at construction time so the SDK's visibility check
-  // (required for autoplay) passes before the iframe is injected.
+  // with a stale element from the previous session.  Use absolute positioning
+  // so the div reliably fills the aspect-ratio container (#offline-player)
+  // — a flex child with height:100% can resolve to 0 in some browsers when
+  // the parent's height comes from aspect-ratio rather than an explicit value.
   const playerDivId = `hub-player-${Date.now()}`;
   const playerDiv = document.createElement('div');
   playerDiv.id = playerDivId;
+  playerDiv.style.position = 'absolute';
+  playerDiv.style.top = '0';
+  playerDiv.style.left = '0';
   playerDiv.style.width = '100%';
   playerDiv.style.height = '100%';
-  playerDiv.style.position = 'relative';
   container.appendChild(playerDiv);
 
   try {
