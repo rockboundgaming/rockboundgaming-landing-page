@@ -234,8 +234,7 @@ function showOfflineCard() {
   container.innerHTML =
     '<div class="offline-placeholder">' +
       '<picture>' +
-        '<source srcset="/assets/logos/tplogo.webp" type="image/webp">' +
-        '<img src="/assets/logos/tplogo.png" alt="Rockbound Gaming" class="offline-logo">' +
+        '<img src="/assets/logos/newlogo.png" alt="Rockbound Gaming" class="offline-logo">' +
       '</picture>' +
       '<div class="offline-text">' +
         '<span class="offline-badge">OFFLINE</span>' +
