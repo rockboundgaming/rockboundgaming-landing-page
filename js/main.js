@@ -75,7 +75,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     const target = document.querySelector(href);
     if (target) {
       target.scrollIntoView({
-        behavior: 'smooth',
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
         block: 'start'
       });
     }
@@ -418,11 +418,10 @@ function updateLiveDisplay(liveStreams) {
   async function buildGrid() {
     teardownGridPlayers();
     liveGrid.innerHTML = streams.map((s, i) => {
-      const levelText = s.level ? ` - Level ${s.level}` : '';
       return `
         <div class="stream-wrapper">
           <div class="streamer-header">
-            <strong>${escapeHtml(s.name || s.twitch)}</strong>${escapeHtml(levelText)}<span class="live-badge" aria-label="LIVE"><span aria-hidden="true">&#x25CF;</span> LIVE</span>
+            <strong>${escapeHtml(s.name || s.twitch)}</strong><span class="live-badge" aria-label="LIVE"><span aria-hidden="true">&#x25CF;</span> LIVE</span>
           </div>
           <div class="video-aspect-ratio">
             <div id="grid-player-${i}-${encodeURIComponent(s.twitch)}" class="grid-player-mount" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
@@ -662,7 +661,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   );
   await loadFeaturedCreators();
   fetchDiscordMembers();
-  initApplyButton();
 });
 
 // Re-check every 3 minutes: matches the GitHub Actions live-status.json refresh cadence
@@ -777,157 +775,13 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
-// ============================================
-//   CREATOR NETWORK APPLICATION FORM
-// ============================================
-// Discord webhook URL (obfuscated to reduce casual exposure in page source).
-const _wParts = [
-  'aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ5MzI5NDM3NjA4MjczNTE4',
-  'NQ==',
-  '/8HBvNdge7aGej7rsfSsTfnK5kOh1YLCX7eNVE3NGfSpjhzdtklqARqdIhSxjj5UYBcK4'
-];
-const CREATOR_APPLICATION_WEBHOOK = atob(_wParts[0] + _wParts[1]) + _wParts[2];
 
-(function initCreatorForm() {
-  const form = document.getElementById('creator-application-form');
-  if (!form) return;
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const statusEl = document.getElementById('creator-form-status');
-    const submitBtn = form.querySelector('button[type="submit"]');
-
-    // Honeypot check — bots fill this hidden field; real users don't.
-    const honeypot = form.elements['website'] ? form.elements['website'].value : '';
-    if (honeypot) return; // silently drop the submission
-
-    const gamertag = form.elements['gamertag'].value.trim();
-    const platform = form.elements['platform'].value;
-    const games    = form.elements['games'].value.trim();
-
-    if (!gamertag || !platform || !games) {
-      showFormStatus(statusEl, 'error', 'Please fill in all fields.');
-      return;
-    }
-
-    // Checkbox CAPTCHA verification
-    const captchaCheck = document.getElementById('creator-captcha-check');
-    if (!captchaCheck || !captchaCheck.checked) {
-      showFormStatus(statusEl, 'error', 'Please confirm you are not a robot.');
-      return;
-    }
-
-    if (!CREATOR_APPLICATION_WEBHOOK) {
-      showFormStatus(statusEl, 'error', 'Applications not yet configured. Join our Discord to apply directly!');
-      return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending…';
-
-    try {
-      const payload = {
-        thread_name: `Application: ${gamertag}`,
-        content: `**New Creator Application**\n**Gamer tag/Discord name:** ${gamertag}\n**Platform:** ${platform}\n**Games:** ${games}`
-      };
-
-      const res = await fetch(CREATOR_APPLICATION_WEBHOOK, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      // Discord returns 204 No Content on success
-      if (res.ok || res.status === 204) {
-        const successScreen = document.getElementById('creator-apply-success');
-        form.style.display = 'none';
-        if (successScreen) successScreen.hidden = false;
-      } else {
-        const errBody = await res.text().catch(() => '');
-        console.error('Discord webhook error:', res.status, errBody);
-        throw new Error(`HTTP ${res.status}`);
-      }
-    } catch (err) {
-      console.error('Creator form error:', err);
-      showFormStatus(statusEl, 'error', 'Something went wrong — please try again or join our Discord directly.');
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Send';
-    }
-  });
-}());
-
-function showFormStatus(el, type, message) {
-  if (!el) return;
-  if (type === 'success') {
-    el.innerHTML = message;
-  } else {
-    el.textContent = message;
+// Close the mobile navigation with Escape and return focus to its toggle.
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && navLinks && navLinks.classList.contains('active')) {
+    navLinks.classList.remove('active');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    menuToggle.setAttribute('aria-label', 'Open navigation menu');
+    menuToggle.focus();
   }
-  el.className = `creator-form-status ${type}`;
-  el.hidden = false;
-  setTimeout(() => { el.hidden = true; }, 8000);
-}
-
-// ============================================
-//   APPLY TO BE A CREATOR — MODAL
-// ============================================
-function initApplyButton() {
-  const modal = document.getElementById('creator-modal');
-  const closeBtn = document.getElementById('creator-modal-close');
-  if (!modal) return;
-
-  function openModal() {
-    modal.hidden = false;
-    document.body.classList.add('modal-open');
-  }
-
-  function closeModal() {
-    modal.hidden = true;
-    document.body.classList.remove('modal-open');
-    // Reset form / success-screen state for next open
-    const form = document.getElementById('creator-application-form');
-    const successScreen = document.getElementById('creator-apply-success');
-    const captchaCheck = document.getElementById('creator-captcha-check');
-    const successCheck = document.getElementById('success-confirm-check');
-    const closeSuccessBtn = document.getElementById('success-close-btn');
-    if (form) { form.style.display = ''; form.reset(); }
-    if (captchaCheck) captchaCheck.checked = false;
-    if (successCheck) successCheck.checked = false;
-    if (closeSuccessBtn) closeSuccessBtn.disabled = true;
-    if (successScreen) successScreen.hidden = true;
-    const statusEl = document.getElementById('creator-form-status');
-    if (statusEl) statusEl.hidden = true;
-  }
-
-  // Wire up the success-screen confirm checkbox and close button.
-  const successCheck = document.getElementById('success-confirm-check');
-  const closeSuccessBtn = document.getElementById('success-close-btn');
-  if (successCheck && closeSuccessBtn) {
-    successCheck.addEventListener('change', () => {
-      closeSuccessBtn.disabled = !successCheck.checked;
-    });
-    closeSuccessBtn.addEventListener('click', closeModal);
-  }
-
-  // "Apply To Be A Creator" button in the live section opens the modal.
-  const liveCtaBtn = document.getElementById('live-cta-apply-btn');
-  if (liveCtaBtn) {
-    liveCtaBtn.addEventListener('click', openModal);
-  }
-
-  // Close on X button click.
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeModal);
-  }
-
-  // Close on overlay (backdrop) click.
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-  });
-
-  // Close on Escape key.
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.hidden) closeModal();
-  });
-}
+});
